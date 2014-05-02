@@ -11,7 +11,7 @@ class CustomForm(forms.Form):
         if template:
             self.template = template
         elif url:
-            self.template = Template.objects.get(pk=url)
+            self.template = Template.objects.get(url=url)
 
         self.__name__ = "form"
 
@@ -53,8 +53,8 @@ class CustomForm(forms.Form):
                         choices.append((parameter.value, parameter.value))
                 self.fields[field.tag] = forms.ChoiceField(choices=choices,
                                                            help_text=help_text,
-                                                           label=field.title,
-                                                           attrs={'class': 'form-control'})
+                                                           label=field.title)
+                                                           #attrs={'class': 'form-control'})
             elif field.type == "M":
                 choices = []
                 for parameter in field.parameters():
@@ -69,14 +69,51 @@ class CustomForm(forms.Form):
             elif field.type == "E":
                 self.fields[field.tag] = forms.EmailField(label=field.title,
                                                           help_text=help_text,
-                                                          required=field.required,
-                                                          attrs={'class': 'form-control'})
+                                                          required=field.required
+                                                          #,attrs={'class': 'form-control'}
+                )
             elif field.type == "U":
                 widget = forms.TextInput(attrs={'class': 'form-control'})
                 self.fields[field.tag] = forms.URLField(label=field.title,
                                                         required=field.required,
                                                         help_text=help_text,
                                                         widget=widget)
+            elif field.type == "P":
+                if widget == None:
+                    widget = forms.TextInput(attrs={'class': 'form-control',
+                                                    'onclick': "openmap('P',this); input=this;",
+                                                    "data-toggle": "modal",
+                                                    "data-target": "#myModal"})
+                self.fields[field.tag] = forms.CharField(label=field.title,
+                                                         required=field.required,
+                                                         help_text=help_text,
+                                                         widget=widget)
+
+            elif field.type == "L":
+                if widget == None:
+                    widget = forms.TextInput(attrs={'class': 'form-control',
+                                                    'onclick': "openmap('L',this); input=this;",
+                                                    "data-toggle": "modal",
+                                                    "data-target": "#myModal"})
+                self.fields[field.tag] = forms.CharField(label=field.title,
+                                                         required=field.required,
+                                                         help_text=help_text,
+                                                         widget=widget)
+
+            elif field.type == "Z":
+                if widget == None:
+                    widget = forms.TextInput(attrs={'class': 'form-control',
+                                                    'onclick': "openmap('Z',this); input=this;",
+                                                    "data-toggle": "modal",
+                                                    "data-target": "#myModal"})
+                self.fields[field.tag] = forms.CharField(label=field.title,
+                                                         required=field.required,
+                                                         help_text=help_text,
+                                                         widget=widget)
+
+
+
+
 
     def save(self, record, commit=True):
         data = self.cleaned_data
