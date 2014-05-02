@@ -4,12 +4,10 @@ from user.models import MyUser, MyGroup, MyGroupUser
 from datetime import datetime
 from django.db import models
 from django.template.defaultfilters import date as _date
-from pytils.translit import slugify
 
 
 class Template(models.Model):
     title = models.CharField(max_length=50, verbose_name="Название формы запроса")
-    url = models.SlugField(max_length=100, unique=True, verbose_name="URL формы", editable=False)
     cdt = models.DateTimeField(verbose_name="Дата создания", default=datetime.now)
     group_user = models.ForeignKey(MyGroup, verbose_name="кому предназначается")
     tableview = models.BooleanField(default=False, verbose_name='табличный вид')
@@ -23,13 +21,16 @@ class Template(models.Model):
     def __str__(self):
         return self.title
 
-    def save(self, *args, **kwargs):
-        self.url = slugify(self.title)
-        super(Template, self).save(*args, **kwargs)
-
     #проверка наличия пользователя в списке доступа к данной форме
     def check_user(self, user):
         return MyGroupUser.objects.filter(group=self.group_user, user=user).exists()
+
+    def save(self, *args, **kwargs):
+        super(Template, self).save(*args, **kwargs)
+        user = self.group_user.get_user()
+        for u in user:
+            rec = Record(template=self, user=u)
+            rec.save()
 
     class Meta:
         verbose_name = 'форму запроса'
@@ -59,7 +60,7 @@ class TemplateField(models.Model):
 
     def parameters(self):
         return FieldParameter.objects.filter(field=self)
-        
+
     class Meta:
         unique_together = ("template", "tag")
         verbose_name = 'элемент формы'
@@ -82,10 +83,12 @@ class FieldParameter(models.Model):
 
 
 class Record(models.Model):
-    cdt = models.DateTimeField()
+    template = models.ForeignKey(Template)
+    cdt = models.DateTimeField(default=datetime.now)
     user = models.ForeignKey(MyUser)
-    esign = models.CharField(max_length=2000)
-    
+    esign = models.CharField(max_length=2000, default='')
+    completed = models.BooleanField(verbose_name='завершено', default=False)
+
     def __unicode__(self):
         return self.cdt.strftime("%Y-%m-%d %H:%M:%S")
 
@@ -107,7 +110,6 @@ class RecordData(models.Model):
     def __str__(self):
         return self.value
 
-
     def decoded_value(self):
         if self.field.type == 'M':
             return eval(self.value)
@@ -116,7 +118,7 @@ class RecordData(models.Model):
     def rendered_value(self):
         if self.field.type == 'B':
             if self.value == 'True':
-                return ugettext("Yes")
+                return ugettext("Да")
             elif self.value == 'False':
-                return ugettext("No")
+                return ugettext("Нет")
         return self.value

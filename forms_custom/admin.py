@@ -10,7 +10,7 @@ class TemplateFieldInline(admin.TabularInline):
 class TemplateAdmin(admin.ModelAdmin):
     inlines = [TemplateFieldInline, ]
     save_as = True
-    list_display = ('title', 'url', 'cdt')
+    list_display = ('title', 'cdt')
     date_hierarchy = 'cdt'
 
 

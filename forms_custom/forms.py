@@ -53,8 +53,8 @@ class CustomForm(forms.Form):
                         choices.append((parameter.value, parameter.value))
                 self.fields[field.tag] = forms.ChoiceField(choices=choices,
                                                            help_text=help_text,
-                                                           label=field.title)
-                                                           #attrs={'class': 'form-control'})
+                                                           label=field.title,
+                                                           attrs={'class': 'form-control'})
             elif field.type == "M":
                 choices = []
                 for parameter in field.parameters():
@@ -69,9 +69,8 @@ class CustomForm(forms.Form):
             elif field.type == "E":
                 self.fields[field.tag] = forms.EmailField(label=field.title,
                                                           help_text=help_text,
-                                                          required=field.required
-                                                          #,attrs={'class': 'form-control'}
-                )
+                                                          required=field.required,
+                                                          attrs={'class': 'form-control'})
             elif field.type == "U":
                 widget = forms.TextInput(attrs={'class': 'form-control'})
                 self.fields[field.tag] = forms.URLField(label=field.title,

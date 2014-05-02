@@ -11,17 +11,19 @@ from functools import partial, wraps
 
 @login_required(login_url='/login/', redirect_field_name=None)
 def get_form(request, template):
-    templ = get_object_or_404(Template, url=template)
+    templ = get_object_or_404(Template, pk=template)
     if templ.check_user(request.user):
         if templ.tableview:
             #min_num=1 в джанго 1.7
-            formset = formset_factory(wraps(CustomForm)(partial(CustomForm, url=template)), extra=3)
+            formset = formset_factory(wraps(CustomForm)(partial(CustomForm, template=templ)), extra=3)
             if request.method == 'POST':
                 sign = request.POST['sign']
                 formsetdata = formset(request.POST)
                 if formsetdata.is_valid():
-
-                    rec = Record(cdt=datetime.now(), user=request.user, esign=sign)
+                    rec = get_object_or_404(Record, template=templ, user=request.user, completed=False)
+                    rec.cdt = datetime.now()
+                    rec.esign = sign
+                    rec.completed = True
                     rec.save()
                     RecordData.objects.filter(record=rec).delete()
                     for form in formsetdata:
@@ -37,9 +39,12 @@ def get_form(request, template):
         else:
             if request.method == 'POST':
                 sign = request.POST['sign']
-                form = CustomForm(url=template, data=request.POST)
+                form = CustomForm(template=templ, data=request.POST)
                 if form.is_valid():
-                    rec = Record(cdt=datetime.now(), user=request.user, esign=sign)
+                    rec = get_object_or_404(Record, template=templ, user=request.user, completed=False)
+                    rec.cdt = datetime.now()
+                    rec.esign = sign
+                    rec.completed = True
                     rec.save()
                     RecordData.objects.filter(record=rec).delete()
                     form.save(rec)
