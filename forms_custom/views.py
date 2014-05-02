@@ -25,6 +25,7 @@ def get_form(request, template):
                     rec.esign = sign
                     rec.completed = True
                     rec.save()
+                    RecordData.objects.filter(record=rec).delete()
                     for form in formsetdata:
                         form.save(rec)
                 else:
@@ -45,6 +46,7 @@ def get_form(request, template):
                     rec.esign = sign
                     rec.completed = True
                     rec.save()
+                    RecordData.objects.filter(record=rec).delete()
                     form.save(rec)
                     return redirect("/")
             else:
