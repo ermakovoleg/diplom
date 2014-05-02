@@ -29,8 +29,9 @@ class Template(models.Model):
         super(Template, self).save(*args, **kwargs)
         user = self.group_user.get_user()
         for u in user:
-            rec = Record(template=self, user=u)
-            rec.save()
+            if not Record.objects.filter(user=u, template=self, completed=False).exists():
+                rec = Record(template=self, user=u)
+                rec.save()
 
     class Meta:
         verbose_name = 'форму запроса'
