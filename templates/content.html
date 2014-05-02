@@ -7,7 +7,7 @@
       <div class="jumbotron">
         <ul>
             {% for record in uncompleted_records %}
-                <li><a href="/form/{{ record.template.url }}">{{ record.template.title}}</a></li>
+                <li><a href="/form/{{ record.template.pk }}">{{ record.template.title}}</a></li>
             {% endfor %}
         </ul>
       </div>

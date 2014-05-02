@@ -9,7 +9,6 @@ from pytils.translit import slugify
 
 class Template(models.Model):
     title = models.CharField(max_length=50, verbose_name="Название формы запроса")
-    url = models.SlugField(max_length=100, unique=True, verbose_name="URL формы", editable=False)
     cdt = models.DateTimeField(verbose_name="Дата создания", default=datetime.now)
     group_user = models.ForeignKey(MyGroup, verbose_name="кому предназначается")
     tableview = models.BooleanField(default=False, verbose_name='табличный вид')
@@ -28,7 +27,6 @@ class Template(models.Model):
         return MyGroupUser.objects.filter(group=self.group_user, user=user).exists()
 
     def save(self, *args, **kwargs):
-        self.url = slugify(self.title)
         super(Template, self).save(*args, **kwargs)
         user = self.group_user.get_user()
         for u in user:

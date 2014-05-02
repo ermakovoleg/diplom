@@ -11,7 +11,7 @@ class CustomForm(forms.Form):
         if template:
             self.template = template
         elif url:
-            self.template = Template.objects.get(url=url)
+            self.template = Template.objects.get(pk=url)
 
         self.__name__ = "form"
 
