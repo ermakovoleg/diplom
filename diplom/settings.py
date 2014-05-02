@@ -43,7 +43,6 @@ INSTALLED_APPS = (
     'user',
     'forms_custom',
     'reports',
-    'pytils',
 )
 
 MIDDLEWARE_CLASSES = (

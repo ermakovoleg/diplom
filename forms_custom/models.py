@@ -4,7 +4,6 @@ from user.models import MyUser, MyGroup, MyGroupUser
 from datetime import datetime
 from django.db import models
 from django.template.defaultfilters import date as _date
-from pytils.translit import slugify
 
 
 class Template(models.Model):
