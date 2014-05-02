@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <script language="javascript" src="/static/js/NativeBridge.js"></script>
+    <script language="javascript" src="/static/js/cript.js"></script>
+    <script language="javascript" src="/static/js/main.js"></script>
+
+
+          <div class="jumbotron">
+            <form method="POST" name="DataForm"> {% csrf_token %}  {% comment %}jk{% endcomment %}
+            {{ formFactory.management_form }}
+                     <table id="tab" class="table table-bordered">
+                        <tr class="affix-top">
+                            {%for label in formFactory|first %}
+                                <th>{{ label.label }}</th>
+                            {% endfor %}
+                        </tr>
+
+                        {% for form in formFactory %}
+                            <tr>
+                                {% for field in form %}
+                                    <td>
+                                        <div class="form-group has-feedback{% if field.errors %} has-error {% endif %}">
+                                            {{ field }}
+                                            <span class="help-block">{{ field.errors }}</span>
+                                        </div>
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </table>
+
+                <div class="form-group">
+                    <div class="controls">
+                      <button class="btn btn-primary" type="submit">Ответить</button>
+                    </div>
+                  </div>
+
+                <input type="button" value="Add More" id="add_more" onclick="cloneMore('#tab tr:last', 'form');">
+                <input id="sign" name="sign" type="hidden" value="0">
+                <object id="cadesplugin" type="application/x-cades" class="hiddenObject"></object>
+                <select size="4" name="CertListBox" id="CertListBox"></select>
+
+                <!--
+                {{ formFactory.empty_form }}
+
+                {# <!-- or for crispy forms --> {% crispy formFactory.empty_form formFactory.form.helper %} #}
+                -->
+
+
+            </form>
+          </div>
+
+
+
+
+{% endblock %}
+
+{% block js %}
+    <script language="JavaScript">
+        CheckForPlugIn()
+        FillCertList("CertListBox")
+    </script>
+{% endblock %}

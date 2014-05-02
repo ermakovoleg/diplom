@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>!</th>
+            {% for titl in title %}
+             <th>
+                {{ titl }}
+             </th>
+            {% endfor %}
+        </tr>
+
+        {% for record in data %}
+            <tr>
+                {% for rec in record %}
+                    <td>{% if rec %}{{ rec }}{% endif %} </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

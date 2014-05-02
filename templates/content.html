@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+      <!-- Main component for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <ul>
+            {% for record in uncompleted_records %}
+                <li><a href="/form/{{ record.template.url }}">{{ record.template.title}}</a></li>
+            {% endfor %}
+        </ul>
+      </div>
+
+{% endblock %}

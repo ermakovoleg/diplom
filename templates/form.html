@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <script language="javascript" src="/static/js/NativeBridge.js"></script>
+    <script language="javascript" src="/static/js/cript.js"></script>
+
+
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+          <div class="jumbotron">
+            <form method="POST" onsubmit="return SignBtn_Click('CertListBox',Data(),'sign')" action="" name="DataForm"> {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group {% if field.errors %}has-error has-feedback{% endif %}">
+                        {% for error in field.errors %}
+                           <div class="alert alert-danger">{{ error }}</div>
+                        {% endfor %}
+                            <label class="control-label" for="{{ field.id }}">{{ field.label_tag }}</label>
+                        <div class="controls">
+                            {{ field }}
+                            <span class="help-block">{{ field.help_text }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="form-group">
+                    <div class="controls">
+                      <button class="btn btn-primary" type="submit">Ответить</button>
+                    </div>
+                  </div>
+
+                <object id="cadesplugin" type="application/x-cades" class="hiddenObject"></object>
+                <select size="4" name="CertListBox" id="CertListBox"></select>
+
+
+            </form>
+          </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block js %}
+    <script language="JavaScript">
+        $('label[for="id_sign"]').remove();
+        CheckForPlugIn()
+        FillCertList("CertListBox")
+
+    </script>
+{% endblock %}
