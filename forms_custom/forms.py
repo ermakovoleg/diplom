@@ -29,7 +29,7 @@ class CustomForm(forms.Form):
                 self.fields[field.tag] = forms.BooleanField(label=field.title,
                                                             required=False,
                                                             help_text=help_text,
-                                                            widget=forms.CheckboxInput(attrs={'class': 'form-control'}))
+                                                            widget=forms.CheckboxInput())#attrs={'class': 'form-control'}))
             elif field.type == "S":
                 if widget == None:
                     widget = forms.TextInput(attrs={'class': 'form-control'})
@@ -51,26 +51,28 @@ class CustomForm(forms.Form):
                 for parameter in field.parameters():
                     if parameter.tag == "choice":
                         choices.append((parameter.value, parameter.value))
+                widget = forms.Select(attrs={'class': 'form-control'})
                 self.fields[field.tag] = forms.ChoiceField(choices=choices,
                                                            help_text=help_text,
                                                            label=field.title,
-                                                           attrs={'class': 'form-control'})
+                                                           widget=widget)
             elif field.type == "M":
                 choices = []
                 for parameter in field.parameters():
                     if parameter.tag == "choice":
                         choices.append((parameter.value, parameter.value))
-                widget = forms.CheckboxSelectMultiple(attrs={'class': 'form-control'})
+                widget = forms.SelectMultiple(attrs={'class': 'form-control', 'multiple': ''})
                 self.fields[field.tag] = forms.MultipleChoiceField(choices=choices,
                                                                    help_text=help_text,
                                                                    label=field.title,
                                                                    widget=widget,
                                                                    required=False)
             elif field.type == "E":
+                widget = forms.EmailInput(attrs={'class': 'form-control'})
                 self.fields[field.tag] = forms.EmailField(label=field.title,
                                                           help_text=help_text,
                                                           required=field.required,
-                                                          attrs={'class': 'form-control'})
+                                                          widget=widget)
             elif field.type == "U":
                 widget = forms.TextInput(attrs={'class': 'form-control'})
                 self.fields[field.tag] = forms.URLField(label=field.title,
@@ -109,10 +111,6 @@ class CustomForm(forms.Form):
                                                          required=field.required,
                                                          help_text=help_text,
                                                          widget=widget)
-
-
-
-
 
     def save(self, record, commit=True):
         data = self.cleaned_data

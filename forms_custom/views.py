@@ -50,7 +50,7 @@ def get_form(request, template):
                     form.save(rec)
                     return redirect("/")
             else:
-                form = CustomForm(url=template)
+                form = CustomForm(template=templ)
                 form.fields["sign"] = forms.CharField(required=False, widget=HiddenInput)
                 return render_to_response('form.html', {'form': form, }, context_instance=RequestContext(request))
     return redirect('/')

@@ -37,5 +37,5 @@ class RecordAdmin(admin.ModelAdmin):
 admin.site.register(Template, TemplateAdmin)
 admin.site.register(TemplateField, TemplateFieldAdmin)
 #admin.site.register(FieldParameter)
-#admin.site.register(Record)
+admin.site.register(Record)
 #admin.site.register(RecordData)
