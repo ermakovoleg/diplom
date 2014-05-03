@@ -14,8 +14,6 @@ urlpatterns = patterns('',
     url(r'^login/', 'user.views.login_view'),
     url(r'^logout/', 'user.views.logout_view'),
     url(r'^$', 'main.views.home', name='home'),
-    url(r'^qwe/$', 'main.views.home1', name='home'),
-
+    url(r'^maps/$', 'main.views.maps', name='home'),
     url(r'^admin/', include(admin.site.urls)),
-
 )

@@ -53,3 +53,48 @@ class Report(models.Model):
 class ReportRecord(models.Model):
     report = models.ForeignKey(Report)
     field = models.ForeignKey(TemplateField)
+
+
+class ReportMaps(models.Model):
+    title = models.CharField(max_length=120, verbose_name="Наименование отчета")
+    user_group = models.ForeignKey(MyGroup, verbose_name="Группа???")
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'Отчет на карте'
+        verbose_name_plural = 'Отчеты на картах'
+
+
+class ReportRecordMaps(models.Model):
+    defaultparams = '''
+        preset: "islands#yellowStretchyIcon",
+        // Отключаем кнопку закрытия балуна.
+        balloonCloseButton: false,
+        // Балун будем открывать и закрывать кликом по иконке метки.
+        hideIconOnBalloonOpen: false
+
+        // Описываем опции геообъекта.
+        // Цвет заливки.
+        //fillColor: '#00FF00',
+        // Цвет обводки.
+        //strokeColor: '#0000FF',
+        // Общая прозрачность (как для заливки, так и для обводки).
+        //opacity: 0.5,
+        // Ширина обводки.
+        //strokeWidth: 5,
+        // Стиль обводки.
+        //strokeStyle: 'shortdash'
+    '''
+
+    report = models.ForeignKey(ReportMaps)
+    field = models.ForeignKey(TemplateField,
+                              limit_choices_to={'type__in': ['P', 'L', 'Z']},
+                              related_name='fiesds',
+                              verbose_name='Поле для отображения',
+                              help_text='Тип: точка, ломаная, полигон')
+    caption = models.ForeignKey(TemplateField,
+                                limit_choices_to={'type__in': ['T', 'S', 'U']},
+                                verbose_name='подпись объекта на карте')
+    parametrs = models.TextField(verbose_name='параметры отображения объекта', default=defaultparams)
