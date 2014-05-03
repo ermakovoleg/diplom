@@ -91,10 +91,28 @@ class ReportRecordMaps(models.Model):
     report = models.ForeignKey(ReportMaps)
     field = models.ForeignKey(TemplateField,
                               limit_choices_to={'type__in': ['P', 'L', 'Z']},
-                              related_name='fiesds',
+                              related_name='fields',
                               verbose_name='Поле для отображения',
                               help_text='Тип: точка, ломаная, полигон')
     caption = models.ForeignKey(TemplateField,
                                 limit_choices_to={'type__in': ['T', 'S', 'U']},
                                 verbose_name='подпись объекта на карте')
     parametrs = models.TextField(verbose_name='параметры отображения объекта', default=defaultparams)
+
+    def get_value(self):
+        users = self.report.user_group.get_user()
+        data = {'type': self.field.type, 'parametrs': self.parametrs, 'data': []}
+        for user in users:
+            temp = {}
+            fields = RecordData.objects.filter(record__user=user, field=self.field)
+            captions = RecordData.objects.filter(record__user=user, field=self.caption)
+            temp['coords'] = []
+            for field, caption in fields, captions:
+                t = {'coord': field, 'caption': caption}
+                temp['coords'].append(t)
+            temp['user'] = user
+            print(temp)
+            data['data'].append(temp)
+        return data
+
+

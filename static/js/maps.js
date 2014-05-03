@@ -5,7 +5,7 @@ ymaps.ready(init);
 
 function init (){
     ymaps.geolocation.get().then(function(res){
-            mySMap = new ymaps.Map('map',{
+            myMap = new ymaps.Map('map',{
             zoom:14,
             center: res.geoObjects.get(0).geometry.getCoordinates(),
             type:'yandex#hybrid',

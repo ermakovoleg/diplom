@@ -15,8 +15,3 @@ def home(request):
         context['report'] = Report.objects.all()
     return render_to_response('content.html', context, context_instance=RequestContext(request))
 
-
-@login_required(login_url='/login/', redirect_field_name=None)
-def maps(request):
-
-    return render_to_response('maps.html', {}, context_instance=RequestContext(request))

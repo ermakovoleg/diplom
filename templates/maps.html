@@ -7,5 +7,15 @@
 {% endblock %}
 
 {% block content %}
+    <h1>{{ data.title }}</h1>
+    {% for d in fields %}
+        <p>{{ d.type }}</p>
+        <p>{{ d.parametrs }}</p>
+        <ul>
+        {% for data in d.data %}
+             <li>{{ data.user }} -- {{ data.field }} -- {{ data.caption }}</li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
      <div id="map" style="width:100%; height:800px"></div>
 {% endblock %}
