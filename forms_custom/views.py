@@ -28,6 +28,7 @@ def get_form(request, template):
                     RecordData.objects.filter(record=rec).delete()
                     for form in formsetdata:
                         form.save(rec)
+                    return redirect("/")
                 else:
                     return render_to_response('multiform.html', {'formFactory': formsetdata, },
                                               context_instance=RequestContext(request))

@@ -15,7 +15,11 @@ def get_report(request, pk):
 def maps(request, pk):
     report = get_object_or_404(ReportMaps, pk=pk)
     fields = report.reportrecordmaps_set.all()
-    ololo = []
+    records = []
     for field in fields:
-         ololo.append(field.get_value())
-    return render_to_response('maps.html', {'data': report, 'fields': ololo}, context_instance=RequestContext(request))
+        records.append(field.get_value())
+    context = {
+        'report': report,
+        'records': records
+    }
+    return render_to_response('maps.html',context, context_instance=RequestContext(request))

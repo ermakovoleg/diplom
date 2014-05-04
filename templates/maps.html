@@ -7,12 +7,12 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ data.title }}</h1>
-    {% for d in fields %}
-        <p>{{ d.type }}</p>
-        <p>{{ d.parametrs }}</p>
+    <h1>{{ report.title }}</h1>
+    {% for record in records %}
+        <p>{{ record.type }}</p>
+        <p>{{ record.parametrs }}</p>
         <ul>
-        {% for data in d.data %}
+        {% for data in record.data %}
             <li>{{ data.user }}</li>
             <ul>
                 {% for coord in data.coords %}
