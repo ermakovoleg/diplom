@@ -29,8 +29,8 @@ class Template(models.Model):
         super(Template, self).save(*args, **kwargs)
         user = self.group_user.get_user()
         for u in user:
-            if not Record.objects.filter(user=u, template=self, completed=False).exists():
-                rec = Record(template=self, user=u)
+            if not Record.objects.filter(user=u, template=self).exists():
+                rec = Record(template=self, user=u, cdt=self.cdt)
                 rec.save()
 
     class Meta:
@@ -84,32 +84,27 @@ class FieldParameter(models.Model):
 
 
 class Record(models.Model):
-    template = models.ForeignKey(Template)
-    cdt = models.DateTimeField(default=datetime.now)
-    user = models.ForeignKey(MyUser)
-    esign = models.CharField(max_length=2000, default='')
+    template = models.ForeignKey(Template, editable=False)
+    cdt = models.DateTimeField(editable=False)
+    user = models.ForeignKey(MyUser, editable=False)
+    esign = models.CharField(max_length=2000, default=0, editable=False)
     completed = models.BooleanField(verbose_name='завершено', default=False)
 
-    def __unicode__(self):
-        return self.cdt.strftime("%Y-%m-%d %H:%M:%S")
-
-    def __str__(self):
-        return self.user.username+'  '+self.cdt.strftime("%Y-%m-%d %H:%M:%S")
-        
     def data(self):
         return RecordData.objects.filter(record=self).order_by('field__tab')
+
+    def __str__(self):
+        return self.user.username+'  ('+self.template.__str__()+') - '+self.cdt.strftime("%Y-%m-%d %H:%M")
 
 
 class RecordData(models.Model):
     record = models.ForeignKey(Record)
     field = models.ForeignKey(TemplateField)
+    line = models.IntegerField(blank=True, null=True)
     value = models.TextField()
     
     def __unicode__(self):
-        return str(self.record)+" - "+str(self.field)
-
-    def __str__(self):
-        return self.value
+        return self.value + " " + self.record.__str__() + " " + self.line.__str__()
 
     def decoded_value(self):
         if self.field.type == 'M':

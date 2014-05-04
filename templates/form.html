@@ -13,7 +13,7 @@
         <div class="col-lg-2"></div>
         <div class="col-lg-8">
           <div class="jumbotron">
-            <form method="POST" onsubmit="return SignBtn_Click('CertListBox',Data(),'sign')" action="" name="DataForm"> {% csrf_token %}
+            <form method="POST"  action="" name="DataForm"> {% csrf_token %} {# onsubmit="return SignBtn_Click('CertListBox',Data(),'sign')" #}
                 {% for field in form %}
                     <div class="form-group {% if field.errors %}has-error has-feedback{% endif %}">
                         {% for error in field.errors %}

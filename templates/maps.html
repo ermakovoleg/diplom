@@ -13,7 +13,12 @@
         <p>{{ d.parametrs }}</p>
         <ul>
         {% for data in d.data %}
-             <li>{{ data.user }} -- {{ data.field }} -- {{ data.caption }}</li>
+            <li>{{ data.user }}</li>
+            <ul>
+                {% for coord in data.coords %}
+                    <li>{{ coord.caption.value }} -- {{ coord.coord.value }}</li>
+                {% endfor %}
+            </ul>
         {% endfor %}
         </ul>
     {% endfor %}

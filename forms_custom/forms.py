@@ -112,10 +112,10 @@ class CustomForm(forms.Form):
                                                          help_text=help_text,
                                                          widget=widget)
 
-    def save(self, record, commit=True):
+    def save(self, record, i=None):
         data = self.cleaned_data
         for k in data:
             f = TemplateField.objects.get(template=self.template, tag=k)
-            d = RecordData(record=record, field=f, value=('%s' % data[k]))
+            d = RecordData(record=record, field=f, line=i, value=('%s' % data[k]))
             d.save()
         return record

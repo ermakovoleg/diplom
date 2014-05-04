@@ -107,11 +107,10 @@ class ReportRecordMaps(models.Model):
             fields = RecordData.objects.filter(record__user=user, field=self.field)
             captions = RecordData.objects.filter(record__user=user, field=self.caption)
             temp['coords'] = []
-            for field, caption in fields, captions:
-                t = {'coord': field, 'caption': caption}
+            for field in fields:
+                t = {'coord': field, 'caption': captions.filter(line=field.line).first()}
                 temp['coords'].append(t)
             temp['user'] = user
-            print(temp)
             data['data'].append(temp)
         return data
 

@@ -12,15 +12,15 @@ from functools import partial, wraps
 @login_required(login_url='/login/', redirect_field_name=None)
 def get_form(request, template):
     templ = get_object_or_404(Template, pk=template)
+    rec = get_object_or_404(Record, template=templ, user=request.user, completed=False)
     if templ.check_user(request.user):
         if templ.tableview:
             #min_num=1 в джанго 1.7
             formset = formset_factory(wraps(CustomForm)(partial(CustomForm, template=templ)), extra=3)
             if request.method == 'POST':
-                sign = request.POST['sign']
+                sign = request.POST.get('sign', False)
                 formsetdata = formset(request.POST)
                 if formsetdata.is_valid():
-                    rec = get_object_or_404(Record, template=templ, user=request.user, completed=False)
                     rec.cdt = datetime.now()
                     rec.esign = sign
                     rec.completed = True
@@ -38,10 +38,9 @@ def get_form(request, template):
 
         else:
             if request.method == 'POST':
-                sign = request.POST['sign']
+                sign = request.POST.get('sign', False)
                 form = CustomForm(template=templ, data=request.POST)
                 if form.is_valid():
-                    rec = get_object_or_404(Record, template=templ, user=request.user, completed=False)
                     rec.cdt = datetime.now()
                     rec.esign = sign
                     rec.completed = True
@@ -49,8 +48,9 @@ def get_form(request, template):
                     RecordData.objects.filter(record=rec).delete()
                     form.save(rec)
                     return redirect("/")
+                else:
+                    return render_to_response('form.html', {'form': form, }, context_instance=RequestContext(request))
             else:
                 form = CustomForm(template=templ)
                 form.fields["sign"] = forms.CharField(required=False, widget=HiddenInput)
                 return render_to_response('form.html', {'form': form, }, context_instance=RequestContext(request))
-    return redirect('/')
