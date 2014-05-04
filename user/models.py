@@ -1,6 +1,7 @@
 #coding: utf-8
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import Group
 
 
 class District(models.Model):
@@ -90,6 +91,10 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     def is_staff(self):
         return self.is_admin
 
+    class Meta:
+        verbose_name = 'пользователь'
+        verbose_name_plural = 'пользователи'
+
 
 class MyGroup(models.Model):
     title = models.CharField(max_length=25, unique=True, verbose_name="наименование группы")
@@ -100,8 +105,18 @@ class MyGroup(models.Model):
     def get_user(self):
         return MyUser.objects.filter(pk__in=MyGroupUser.objects.filter(group=self).values('user')).order_by("username")
 
+    class Meta:
+        verbose_name = 'группа пользователей'
+        verbose_name_plural = 'группы пользователей'
+
 
 class MyGroupUser(models.Model):
     group = models.ForeignKey(MyGroup)
     user = models.ForeignKey(MyUser)
 
+
+class GroupMeta(Group):
+    class Meta:
+        verbose_name = 'Права пользователей'
+        verbose_name_plural = 'Права пользователей'
+        proxy = True

@@ -68,26 +68,6 @@ class ReportMaps(models.Model):
 
 
 class ReportRecordMaps(models.Model):
-    defaultparams = '''
-        preset: "islands#yellowStretchyIcon",
-        // Отключаем кнопку закрытия балуна.
-        balloonCloseButton: false,
-        // Балун будем открывать и закрывать кликом по иконке метки.
-        hideIconOnBalloonOpen: false
-
-        // Описываем опции геообъекта.
-        // Цвет заливки.
-        //fillColor: '#00FF00',
-        // Цвет обводки.
-        //strokeColor: '#0000FF',
-        // Общая прозрачность (как для заливки, так и для обводки).
-        //opacity: 0.5,
-        // Ширина обводки.
-        //strokeWidth: 5,
-        // Стиль обводки.
-        //strokeStyle: 'shortdash'
-    '''
-
     report = models.ForeignKey(ReportMaps)
     field = models.ForeignKey(TemplateField,
                               limit_choices_to={'type__in': ['P', 'L', 'Z']},
@@ -97,7 +77,7 @@ class ReportRecordMaps(models.Model):
     caption = models.ForeignKey(TemplateField,
                                 limit_choices_to={'type__in': ['T', 'S', 'U']},
                                 verbose_name='подпись объекта на карте')
-    parametrs = models.TextField(verbose_name='параметры отображения объекта', default=defaultparams)
+    parametrs = models.TextField(verbose_name='параметры отображения объекта', blank=True)
 
     def get_value(self):
         users = self.report.user_group.get_user()
@@ -113,5 +93,9 @@ class ReportRecordMaps(models.Model):
             temp['user'] = user
             data['data'].append(temp)
         return data
+
+    class Meta:
+        verbose_name = 'поле отчета'
+        verbose_name_plural = 'поля отчета'
 
 

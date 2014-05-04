@@ -1,5 +1,7 @@
 from django.contrib import admin
+from django.forms import ModelForm, TextInput
 from reports.models import ReportRecord, Report, ReportMaps, ReportRecordMaps
+from suit.widgets import AutosizedTextarea
 
 
 class ReportRecordInLines(admin.TabularInline):
@@ -11,13 +13,25 @@ class ReportAdmin(admin.ModelAdmin):
     inlines = [ReportRecordInLines, ]
 
 
+class ReportRecordMapsForm(ModelForm):
+    class Meta:
+        widgets = {
+            'parametrs': AutosizedTextarea
+        }
+
+
 class ReportRecordMapsInLines(admin.TabularInline):
     extra = 1
     model = ReportRecordMaps
+    form = ReportRecordMapsForm
 
 
 class ReportMapsAdmin(admin.ModelAdmin):
     inlines = [ReportRecordMapsInLines, ]
+
+    suit_form_includes = (
+        ('admin/help_map_report.html', 'middle', ''),
+    )
 
 admin.site.register(Report, ReportAdmin)
 admin.site.register(ReportMaps, ReportMapsAdmin)

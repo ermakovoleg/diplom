@@ -1,5 +1,5 @@
 #coding: utf-8
-from user.models import MyUser, Locality, District, MyGroupUser, MyGroup
+from user.models import MyUser, Locality, District, MyGroupUser, MyGroup, GroupMeta
 
 from django import forms
 from django.contrib import admin
@@ -108,3 +108,4 @@ admin.site.register(Locality, LocalityAdmin)
 admin.site.register(District, DistrictAdmin)
 admin.site.register(MyGroup, MyGroupAdmin)
 admin.site.unregister(Group)
+admin.site.register(GroupMeta)
