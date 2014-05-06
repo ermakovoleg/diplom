@@ -32,17 +32,20 @@ TEMPLATE_DIRS = (
 )
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
+SITE_ID = 1
 
 # Application definition
 
 INSTALLED_APPS = (
     'suit',
+    'suit_redactor',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'flatpages',
     'south',
     'user',
     'forms_custom',
@@ -56,6 +59,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = TCP + (
