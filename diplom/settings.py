@@ -15,7 +15,7 @@ from diplom.suit_conf import SUIT_CONFIG
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
+print(BASE_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -75,7 +75,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    },
 }
 
 # Internationalization

@@ -1,3 +1,4 @@
+#coding: utf-8
 from django.db import models
 from user.models import MyGroup
 from forms_custom.models import TemplateField,Record,RecordData

@@ -1,4 +1,4 @@
-
+#coding: utf-8
 SUIT_CONFIG = {
     'ADMIN_NAME': 'Диплом "Соберем все!"',
     'HEADER_DATE_FORMAT': 'l, j F Y',
