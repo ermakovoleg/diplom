@@ -1,11 +1,12 @@
 #coding: utf-8
+from django.forms import ModelForm, SelectMultiple
 from user.models import MyUser, Locality, District, MyGroupUser, MyGroup, GroupMeta
 
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.forms import ReadOnlyPasswordHashField, AdminPasswordChangeForm
 
 
 class UserCreationForm(forms.ModelForm):
@@ -44,7 +45,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = MyUser
-        fields = ['username', 'locality', 'email', 'is_active', 'is_superuser']
+        fields = ['username', 'locality', 'email', 'is_superuser']
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
@@ -57,6 +58,8 @@ class MyUserAdmin(UserAdmin):
     # The forms to add and change user instances
     form = UserChangeForm
     add_form = UserCreationForm
+    change_password_form = AdminPasswordChangeForm
+    change_user_password_template = 'admin/password_change_password_form.html'
 
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
@@ -68,11 +71,10 @@ class MyUserAdmin(UserAdmin):
     ordering = ('username', 'email',)
     filter_horizontal = ()
 
-
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         ('Personal info', {'fields': ('email', 'locality')}),
-        ('Permissions', {'fields': ('is_active', 'is_admin', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Права пользователя', {'fields': ('is_admin', 'is_superuser', 'groups')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
@@ -102,10 +104,24 @@ class MyGroupUserInLine(admin.TabularInline):
 class MyGroupAdmin(admin.ModelAdmin):
     inlines = [MyGroupUserInLine, ]
 
+    class Media:
+        # edit this path to wherever
+        css = {'all': ('css/no-addanother-button.css',)}
+
+
+class GroupMetaForm(ModelForm):
+    class Meta:
+        widgets = {
+            'permissions': SelectMultiple(attrs={'style': 'height: 200px; width: 400px', })
+        }
+
+
+class GroupMetaAdmin(admin.ModelAdmin):
+    form = GroupMetaForm
 
 admin.site.register(MyUser, MyUserAdmin)
 admin.site.register(Locality, LocalityAdmin)
 admin.site.register(District, DistrictAdmin)
 admin.site.register(MyGroup, MyGroupAdmin)
 admin.site.unregister(Group)
-admin.site.register(GroupMeta)
+admin.site.register(GroupMeta, GroupMetaAdmin)

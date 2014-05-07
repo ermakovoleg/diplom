@@ -4,6 +4,7 @@ from reports.models import ReportRecord, Report, ReportMaps, ReportRecordMaps
 from suit.widgets import AutosizedTextarea
 
 
+
 class ReportRecordInLines(admin.TabularInline):
     extra = 3
     model = ReportRecord
@@ -32,6 +33,10 @@ class ReportMapsAdmin(admin.ModelAdmin):
     suit_form_includes = (
         ('admin/help_map_report.html', 'middle', ''),
     )
+
+    class Media:
+        # edit this path to wherever
+        css = {'all': ('css/no-addanother-button.css',)}
 
 admin.site.register(Report, ReportAdmin)
 admin.site.register(ReportMaps, ReportMapsAdmin)

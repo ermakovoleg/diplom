@@ -1,16 +1,14 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <script src="http://api-maps.yandex.ru/2.1/?load=package.full&lang=ru-RU" type="text/javascript"></script>
-    <script src="/static/js/maps.js" type="text/javascript" ></script>
-
+    <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 {% endblock %}
 
 {% block content %}
     <h1>{{ report.title }}</h1>
-    {% for record in records %}
+  {% comment %}   {% for record in records %}
         <p>{{ record.type }}</p>
-        <p>{{ record.parametrs }}</p>
+        <p id="parampam">{{ record.parametrs }}</p>
         <ul>
         {% for data in record.data %}
             <li>{{ data.user }}</li>
@@ -21,6 +19,72 @@
             </ul>
         {% endfor %}
         </ul>
+    {% endfor %}  {% endcomment %}
+     <div id="map" style="width:100%; height:600px"></div>
+
+
+
+{% endblock %}
+
+
+{% block js %}
+   <script language="JavaScript">
+    var myMap;
+    ymaps.ready(init);
+
+function init (){
+
+
+            myMap = new ymaps.Map('map',{
+            zoom:6,
+            center:[53.9945, 115.264],
+            type:'yandex#hybrid',
+            controls: ['zoomControl', 'typeSelector',  'fullscreenControl']});
+        function addpoint(coordinate,dopinf,param){
+                     var myGeoObject;
+                    myGeoObject = new ymaps.Placemark(coordinate,dopinf,param);
+
+                    myMap.geoObjects.add(myGeoObject);
+
+                    };
+        function addpolygon(coordinate1,dopinf1,param1){
+			 var myGeoObject1;
+            myGeoObject1 = new ymaps.Polygon(coordinate1,dopinf1,param1);
+
+            myMap.geoObjects.add(myGeoObject1);
+			};
+
+        function addpolyline(coordinate2,dopinf2,param2){
+			 var myGeoObject2;
+            myGeoObject2 = new ymaps.Polyline(coordinate2,dopinf2,param2);
+
+            myMap.geoObjects.add(myGeoObject2);
+			};
+    {% for record in records %}
+        {% for data in record.data %}
+                {% for coord in data.coords %}
+                    var param = $('#parampam').html();
+                       switch ('{{ record.type }}'){
+                            case 'P':
+
+                                    addpoint({{ coord.coord.value }},{balloonContentBody:"{{ coord.caption.value }}",
+                                                                     balloonContentHeader:"{{ report.title }}",
+                                                                     balloonContentFooter:"{{ data.user }}"});
+                            break;
+                        case 'Z':
+                                    addpolygon({{ coord.coord.value }},{balloonContentBody:"{{ coord.caption.value }}",
+                                                                     balloonContentHeader:"{{ report.title }}",
+                                                                     balloonContentFooter:"{{ data.user }}"});
+                            break;
+                        case 'L':
+                                    addpolyline({{ coord.coord.value }},{balloonContentBody:"{{ coord.caption.value }}",
+                                                                     balloonContentHeader:"{{ report.title }}",
+                                                                     balloonContentFooter:"{{ data.user }}"});
+                            break;
+                        }
+            {% endfor %}
+        {% endfor %}
     {% endfor %}
-     <div id="map" style="width:100%; height:800px"></div>
+ }
+    </script>
 {% endblock %}

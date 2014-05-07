@@ -18,7 +18,7 @@ class District(models.Model):
 
 class Locality(models.Model):
     name = models.CharField(max_length=50, verbose_name="наименование населенного пункта")
-    district = models.ForeignKey('District')
+    district = models.ForeignKey('District', verbose_name='район')
 
     def __unicode__(self):
         return self.district.name_district + " -- " + self.name
@@ -69,8 +69,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     locality = models.ForeignKey('Locality', verbose_name="Населенный пункт", blank=True, null=True)
     email = models.EmailField(verbose_name='email', max_length=255)
 
-    is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False, verbose_name='доступ к административному интерфейсу')
 
     objects = MyUserManager()
 

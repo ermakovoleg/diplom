@@ -53,7 +53,7 @@ class TemplateField(models.Model):
     tag = models.SlugField(max_length=100, default=set_tag, editable=False)
     title = models.CharField(max_length=255, verbose_name="вопрос")
     type = models.CharField(max_length=1, choices=FieldTypes, verbose_name="тип поля")
-    tab = models.IntegerField(default=999, verbose_name="порядок")
+    tab = models.IntegerField(verbose_name="порядок")
     required = models.BooleanField(default=True, verbose_name="обязательное поле")
 
     def __str__(self):

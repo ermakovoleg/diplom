@@ -1,10 +1,12 @@
 from django.contrib import admin
+from suit.admin import SortableTabularInline
 from forms_custom.models import *
 
 
-class TemplateFieldInline(admin.TabularInline):
+class TemplateFieldInline(SortableTabularInline):
     model = TemplateField
     extra = 2
+    sortable = 'tab'
 
 
 class TemplateAdmin(admin.ModelAdmin):
