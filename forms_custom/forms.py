@@ -2,6 +2,7 @@
 from datetime import datetime
 from django import forms
 from django.forms.formsets import BaseFormSet
+from suit.widgets import AutosizedTextarea
 from forms_custom.models import *
 
 
@@ -40,7 +41,8 @@ class CustomForm(forms.Form):
 
             elif field.type == "T":
                 if widget == None:
-                    widget = forms.Textarea(attrs={'class': 'form-control'})
+                    #widget = forms.Textarea(attrs={'class': 'form-control'})
+                    widget = AutosizedTextarea(attrs={'class': 'form-control'})
                 self.fields[field.tag] = forms.CharField(label=field.title,
                                                          required=field.required,
                                                          help_text=help_text,

@@ -5,7 +5,7 @@ from forms_custom.models import *
 
 class TemplateFieldInline(SortableTabularInline):
     model = TemplateField
-    extra = 2
+    extra = 0
     sortable = 'tab'
 
 
