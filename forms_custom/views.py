@@ -57,3 +57,25 @@ def get_form(request, template):
                 form = CustomForm(template=templ)
                 form.fields["sign"] = forms.CharField(required=False, widget=HiddenInput)
                 return render_to_response('form.html', {'form': form, }, context_instance=RequestContext(request))
+
+
+@login_required(login_url='/login/', redirect_field_name=None)
+def form_publish(request):
+    templates = Template.objects.filter(publish=True)
+    return render_to_response('baseadmin.html', {'templates': templates, }, context_instance=RequestContext(request))
+
+
+@login_required(login_url='/login/', redirect_field_name=None)
+def form_status(request, pk):
+    template = get_object_or_404(Template, pk=pk)
+    return render_to_response('baseadmin.html', {'template': template}, context_instance=RequestContext(request))
+
+
+@login_required(login_url='/login/', redirect_field_name=None)
+def get_record(request, pk):
+    record = get_object_or_404(Record, pk=pk)
+    if 'approve' in request.POST:
+        record.approved = request.user
+        record.status = 'R'
+        record.save()
+    return render_to_response('baseadmin.html', {'record': record}, context_instance=RequestContext(request))

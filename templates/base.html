@@ -24,10 +24,7 @@
     <![endif]-->
   </head>
 <body>
-
-
     <div class="container">
-
         {% block nav %}
             <!-- Static navbar -->
               <div class="navbar navbar-default" role="navigation">
@@ -38,9 +35,10 @@
                   <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
 
-                        <li><a href="#">Что то</a></li>
+                        <li><a href="/help/">Справка</a></li>
                         {% block navbar %}
                             {% if user.is_staff %}
+                                <li><a href="/form/publish/">Опубликованные формы</a></li>
                                 <li class="dropdown">
                                   <a href="/" class="dropdown-toggle" data-toggle="dropdown">Отчеты<b class="caret"></b></a>
                                   <ul class="dropdown-menu">
@@ -54,7 +52,7 @@
 
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                      <li><a href="#"><b>{{ user.username }}</b></a> </li>
+                      <li><a href="{% if user.is_staff %}/admin/{% else %}#{% endif %}"><b>{{ user.username }}</b></a> </li>
                       <li><a href="/logout/">Выход</a></li>
                     </ul>
                   </div><!--/.nav-collapse -->
@@ -67,32 +65,6 @@
         {% endblock %}
 
     </div> <!-- /container -->
-
-
-<div id="footer" class="footer navbar-fixed-bottom row-fluid">
-    <div class="content">
-      <div class="tools">
-
-
-
-      </div>
-
-      <div class="copyright">
-
-
-
-      </div>
-
-      <div class="branding">
-
-          Диплом "Соберем все!"
-
-
-      </div>
-    </div>
-  </div>
-
-
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

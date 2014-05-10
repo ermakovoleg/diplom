@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block navbar %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+    {% if templates %}
+        <div class="jumbotron">
+            <h2>Опубликованные формы</h2>
+            <br>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Название</th>
+                        <th>Дата создания</th>
+                        <th>Статус</th>
+                        <th>Создал</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for template in templates %}
+                         <tr onclick="location.href='/form/status/{{ template.pk }}'">
+                            <th>{{ template.pk }}</th>
+                            <td>{{ template.title }}</td>
+                            <td>{{ template.cdt }}</td>
+                            <td>Хорошо</td>
+                            <td>{{ template.creator}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    {% if template %}
+        <div class="jumbotron">
+            <h2>{{ template.title }}</h2>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Пользователь</th>
+                        <th>Статус</th>
+                        <th>Утвердил</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in template.get_records %}
+                         <tr onclick="location.href='/form/record/{{ record.pk }}'">
+                            <th>{{ record.user.get_full_name }}</th>
+                            <td>{{ record.get_status }}</td>
+                            <td>{{ record.approved }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    {% if record %}
+        <div class="jumbotron">
+            <h2>{{ record.template.title }}</h2>
+            <h3>Пользователь: {{ record.user.get_full_name }}</h3>
+            <h4>Дата последнего изменения: {{ record.cdt }}</h4>
+            <h4>Статус: {{ record.get_status }}</h4>
+            {% if record.status != 'R' %}
+            <form method="post"> {% csrf_token %}
+                <input type="submit" value="Утвердить" name="approve" class="btn btn-success">
+            </form>
+            {% endif %}
+            <br>
+            <br>
+
+            {% if record.template.tableview %}
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            {% for field in record.template.fields %}
+                                <th>{{ field.title }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for datas in record.data %}
+                             <tr>
+                                {% for data in datas %}
+                                    <td>{{ data.value }}</td>
+                                {% endfor %}
+                             </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                {% for data in record.data %}
+                    <p>{{ data.field.title }}</p>
+                    <blockquote>
+                         <p> {{ data.value }} </p>
+                    </blockquote>
+                {% endfor %}
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

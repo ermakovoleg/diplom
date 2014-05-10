@@ -1,4 +1,5 @@
 #coding: utf-8
+from django.db.models import Max
 from django.utils.translation import ugettext
 from user.models import MyUser, MyGroup, MyGroupUser
 from datetime import datetime
@@ -11,6 +12,8 @@ class Template(models.Model):
     cdt = models.DateTimeField(verbose_name="Дата создания", default=datetime.now)
     group_user = models.ForeignKey(MyGroup, verbose_name="кому предназначается")
     tableview = models.BooleanField(default=False, verbose_name='табличный вид')
+    publish = models.BooleanField(default=False, verbose_name='опубликовано')
+    creator = models.ForeignKey(MyUser, editable=False)
 
     def fields(self):
         return TemplateField.objects.filter(template=self).order_by('tab')
@@ -25,13 +28,17 @@ class Template(models.Model):
     def check_user(self, user):
         return MyGroupUser.objects.filter(group=self.group_user, user=user).exists()
 
+    def get_records(self):
+        return Record.objects.filter(template=self)
+
     def save(self, *args, **kwargs):
         super(Template, self).save(*args, **kwargs)
-        user = self.group_user.get_user()
-        for u in user:
-            if not Record.objects.filter(user=u, template=self).exists():
-                rec = Record(template=self, user=u, cdt=self.cdt)
-                rec.save()
+        if self.publish:
+            user = self.group_user.get_user()
+            for u in user:
+                if not Record.objects.filter(user=u, template=self).exists():
+                    rec = Record(template=self, user=u, cdt=self.cdt)
+                    rec.save()
 
     class Meta:
         verbose_name = 'форму запроса'
@@ -84,14 +91,32 @@ class FieldParameter(models.Model):
 
 
 class Record(models.Model):
+
+    StatusTypes = (('W', 'В процессе'), ('R', 'Сдано'), ('O', 'Просрочено'), ('K', 'Сдано с просрочкой'))
+
     template = models.ForeignKey(Template, editable=False)
     cdt = models.DateTimeField(editable=False)
     user = models.ForeignKey(MyUser, editable=False)
     esign = models.CharField(max_length=2000, default=0, editable=False)
     completed = models.BooleanField(verbose_name='завершено', default=False)
+    status = models.CharField(max_length=1, choices=StatusTypes, verbose_name="статус", default='W')
+    approved = models.ForeignKey(MyUser, verbose_name='утвердил', null=True, blank=True, related_name='approved')
+
+    def get_status(self):
+        if (self.status == 'W'):
+            return "В процессе"
+        elif (self.status == 'R'):
+            return 'Сдано'
+        else:
+            return "Что то еще"
 
     def data(self):
-        return RecordData.objects.filter(record=self).order_by('field__tab')
+        rex = RecordData.objects.filter(record=self)
+        num_lines = rex.aggregate(Max('line'))['line__max']
+        data = []
+        for x in range(num_lines+1):
+            data.append(rex.filter(line=x).order_by('field__tab'))
+        return data
 
     def __str__(self):
         return self.user.username+'  ('+self.template.__str__()+') - '+self.cdt.strftime("%Y-%m-%d %H:%M")

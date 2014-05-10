@@ -4,7 +4,7 @@ body {
 margin: 0;
 line-height: 18px;
 color: #333333;
-background-color: #edeff1;
+   #background-color: #f8f8f8;
 }
 
 object.hiddenObject
@@ -20,21 +20,19 @@ object.hiddenObject
         max-height: 0px;
     }
 .footer {
-color: #666;
-background-color: #d5d7d8;
 font-size: 11px;
 line-height: 1.5em;
-text-shadow: 0 1px rgba(255,255,255,0.5);
     height: 60px;
 }
 
-.footer .content {
-border-top: 5px solid #e1e3e5;
-}
 
 .footer .content .branding {
 padding: 15px 0 0 0;
 margin: 0 auto;
 width: 200px;
 text-align: center;
+}
+
+.jumbotron {
+background-color: #f8f8f8;
 }

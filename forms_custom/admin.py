@@ -12,8 +12,13 @@ class TemplateFieldInline(SortableTabularInline):
 class TemplateAdmin(admin.ModelAdmin):
     inlines = [TemplateFieldInline, ]
     save_as = True
-    list_display = ('title', 'cdt')
+    list_display = ('title', 'cdt', 'publish')
     date_hierarchy = 'cdt'
+
+    def save_model(self, request, obj, form, change):
+        if getattr(obj, 'creator', None) is None:
+            obj.author = request.user2
+        obj.save()
 
 
 class FieldParameterInline(admin.TabularInline):

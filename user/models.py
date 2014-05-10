@@ -66,7 +66,7 @@ class MyUserManager(BaseUserManager):
 
 class MyUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=40, unique=True)
-    locality = models.ForeignKey('Locality', verbose_name="Населенный пункт", blank=True, null=True)
+    locality = models.ForeignKey(Locality, verbose_name="Населенный пункт", blank=True, null=True)
     email = models.EmailField(verbose_name='email', max_length=255)
 
     is_admin = models.BooleanField(default=False, verbose_name='доступ к административному интерфейсу')
@@ -76,7 +76,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "username"
 
     def get_full_name(self):
-        # The user is identified by their email address
+        if (self.locality):
+            return self.locality.district.name_district + ' - ' + self.locality.name+' (' + self.username + ')'
         return self.username
 
     def get_short_name(self):
