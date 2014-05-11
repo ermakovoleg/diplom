@@ -77,18 +77,18 @@
       <index name="forms_custom_fieldparameter_aeee0ce4" unique="true" columns="field_id"/>
     </table>
     <table name="forms_custom_record" schema="" catalog="" type="TABLE">
-      <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
-      <column name="template_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
-      <column name="cdt" sqlType="DATETIME" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
       <column name="user_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <column name="esign" sqlType="VARCHAR(2000)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
       <column name="completed" sqlType="BOOL" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
+      <column name="template_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
+      <column name="approved_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="true" jdbcType="4"/>
+      <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="true" jdbcType="4"/>
+      <column name="status" sqlType="VARCHAR(1)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <column name="cdt" sqlType="DATETIME" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
       <primary-key columns="id"/>
-      <foreign-key name="#FAKE_forms_custom_record_1" columns="user_id" ref-table="user_myuser" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <foreign-key name="#FAKE_forms_custom_record_2" columns="template_id" ref-table="forms_custom_template" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
       <exported-key name="#FAKE_forms_custom_recorddata_2" table="forms_custom_recorddata" schema="" catalog="" columns="record_id"/>
-      <index name="forms_custom_record_6340c63c" unique="true" columns="user_id"/>
       <index name="forms_custom_record_43d23afc" unique="true" columns="template_id"/>
+      <index name="forms_custom_record_6340c63c" unique="true" columns="user_id"/>
     </table>
     <table name="forms_custom_recorddata" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
@@ -103,14 +103,14 @@
       <index name="forms_custom_recorddata_52103e4c" unique="true" columns="record_id"/>
     </table>
     <table name="forms_custom_template" schema="" catalog="" type="TABLE">
-      <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
-      <column name="title" sqlType="VARCHAR(50)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
-      <column name="cdt" sqlType="DATETIME" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
       <column name="group_user_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
+      <column name="creator_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
+      <column name="cdt" sqlType="DATETIME" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <column name="title" sqlType="VARCHAR(50)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="true" jdbcType="4"/>
+      <column name="publish" sqlType="BOOL" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <column name="tableview" sqlType="BOOL" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <primary-key columns="id"/>
-      <foreign-key name="#FAKE_forms_custom_template_1" columns="group_user_id" ref-table="user_mygroup" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <exported-key name="#FAKE_forms_custom_record_2" table="forms_custom_record" schema="" catalog="" columns="template_id"/>
       <exported-key name="#FAKE_forms_custom_templatefield_1" table="forms_custom_templatefield" schema="" catalog="" columns="template_id"/>
       <index name="forms_custom_template_8e0a0d8c" unique="true" columns="group_user_id"/>
     </table>
@@ -200,7 +200,6 @@
       <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <column name="title" sqlType="VARCHAR(25)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
       <primary-key columns="id"/>
-      <exported-key name="#FAKE_forms_custom_template_1" table="forms_custom_template" schema="" catalog="" columns="group_user_id"/>
       <exported-key name="#FAKE_reports_report_1" table="reports_report" schema="" catalog="" columns="user_group_id"/>
       <exported-key name="#FAKE_reports_reportmaps_1" table="reports_reportmaps" schema="" catalog="" columns="user_group_id"/>
       <exported-key name="#FAKE_user_mygroupuser_2" table="user_mygroupuser" schema="" catalog="" columns="group_id"/>
@@ -225,7 +224,6 @@
       <column name="password" sqlType="VARCHAR(128)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
       <column name="last_login" sqlType="DATETIME" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
       <primary-key columns="id"/>
-      <exported-key name="#FAKE_forms_custom_record_1" table="forms_custom_record" schema="" catalog="" columns="user_id"/>
       <exported-key name="#FAKE_user_mygroupuser_1" table="user_mygroupuser" schema="" catalog="" columns="user_id"/>
       <index name="user_myuser_0f50bb3a" unique="true" columns="locality_id"/>
     </table>

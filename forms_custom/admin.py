@@ -9,16 +9,24 @@ class TemplateFieldInline(SortableTabularInline):
     sortable = 'tab'
 
 
+
+
+
 class TemplateAdmin(admin.ModelAdmin):
     inlines = [TemplateFieldInline, ]
     save_as = True
     list_display = ('title', 'cdt', 'publish')
     date_hierarchy = 'cdt'
 
+    def export(modeladmin, request, queryset):
+            print('наша функция')
+
     def save_model(self, request, obj, form, change):
         if getattr(obj, 'creator', None) is None:
             obj.author = request.user2
         obj.save()
+
+    actions = [export, ]
 
 
 class FieldParameterInline(admin.TabularInline):
