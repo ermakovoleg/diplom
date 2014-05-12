@@ -7,7 +7,7 @@ from reports.models import Report
 
 @login_required(login_url='/login/', redirect_field_name=None)
 def home(request):
-    uncompleted_records = Record.objects.filter(completed=False, user=request.user)
+    uncompleted_records = Record.objects.filter(status__in=['W', 'K'], user=request.user)
     context = {
         'uncompleted_records': uncompleted_records,
     }

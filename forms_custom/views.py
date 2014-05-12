@@ -12,7 +12,7 @@ from functools import partial, wraps
 @login_required(login_url='/login/', redirect_field_name=None)
 def get_form(request, template):
     templ = get_object_or_404(Template, pk=template)
-    rec = get_object_or_404(Record, template=templ, user=request.user, completed=False)
+    rec = get_object_or_404(Record, template=templ, user=request.user, status__in=['W', 'K'])
     if templ.check_user(request.user):
         if templ.tableview:
             #min_num=1 в джанго 1.7

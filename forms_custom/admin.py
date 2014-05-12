@@ -9,9 +9,6 @@ class TemplateFieldInline(SortableTabularInline):
     sortable = 'tab'
 
 
-
-
-
 class TemplateAdmin(admin.ModelAdmin):
     inlines = [TemplateFieldInline, ]
     save_as = True

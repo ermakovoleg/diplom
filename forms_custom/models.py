@@ -92,21 +92,24 @@ class FieldParameter(models.Model):
 
 class Record(models.Model):
 
-    StatusTypes = (('W', 'В процессе'), ('R', 'Сдано'), ('O', 'Просрочено'), ('K', 'Сдано с просрочкой'))
+    StatusTypes = (('W', 'Данные не введены'), ('R', 'Сдано'), ('O', 'На рассмотрении'), ('K', 'Доработка'))
 
     template = models.ForeignKey(Template, editable=False)
     cdt = models.DateTimeField(editable=False)
     user = models.ForeignKey(MyUser, editable=False)
     esign = models.CharField(max_length=2000, default=0, editable=False)
-    completed = models.BooleanField(verbose_name='завершено', default=False)
     status = models.CharField(max_length=1, choices=StatusTypes, verbose_name="статус", default='W')
     approved = models.ForeignKey(MyUser, verbose_name='утвердил', null=True, blank=True, related_name='approved')
 
     def get_status(self):
         if (self.status == 'W'):
-            return "В процессе"
+            return "Данные не введены"
         elif (self.status == 'R'):
             return 'Сдано'
+        elif (self.status == 'O'):
+            return 'На рассмотрении'
+        elif (self.status == 'K'):
+            return 'Доработка'
         else:
             return "Что то еще"
 

@@ -47,10 +47,10 @@
                 </thead>
                 <tbody>
                     {% for record in template.get_records %}
-                         <tr onclick="location.href='/form/record/{{ record.pk }}'">
+                         <tr {% if record.status != 'W' %} onclick="location.href='/form/record/{{ record.pk }}'{% endif %}">
                             <th>{{ record.user.get_full_name }}</th>
                             <td>{{ record.get_status }}</td>
-                            <td>{{ record.approved }}</td>
+                            <td>{% if record.status != 'W' %}{{ record.approved }}{% endif %}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -65,7 +65,28 @@
             <h4>Дата последнего изменения: {{ record.cdt }}</h4>
             <h4>Статус: {{ record.get_status }}</h4>
             {% if record.status != 'R' %}
+
             <form method="post"> {% csrf_token %}
+
+                    <input type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg" value="Отправить на доработку" >
+                    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="myModalLabel">Комментарий к доработке</h4>
+                            </div>
+                            <div class="modal-body">
+                                  <textarea class="form-control" rows="6" name="comment"></textarea>
+                            </div>
+                             <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                                <button type="submit" name="revision" class="btn btn-success">Отправить</button>
+                             </div>
+                        </div>
+                      </div>
+                    </div>
+
                 <input type="submit" value="Утвердить" name="approve" class="btn btn-success">
             </form>
             {% endif %}
