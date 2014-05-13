@@ -21,7 +21,7 @@ SUIT_CONFIG = {
          'models': ('forms_custom.template', 'forms_custom.templatefield')},
 
         {'label': 'Отчеты', 'icon': 'icon-file',
-         'models': ('reports.reportmaps',)},
+         'models': ('reports.report', 'reports.reportmaps')},
 '''
         # Cross-linked models with custom name; Hide default icon
         {'label': 'Custom', 'icon': None, 'models': (

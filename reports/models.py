@@ -50,6 +50,9 @@ class Report(models.Model):
 
         return data1, title
 
+    class Meta:
+        verbose_name = 'консолидированный отчет'
+        verbose_name_plural = 'консолидированные отчеты'
 
 class ReportRecord(models.Model):
     report = models.ForeignKey(Report)

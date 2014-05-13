@@ -66,6 +66,16 @@
       <primary-key columns="id"/>
       <index name="flatpages_flatpage_c379dc61" unique="true" columns="url"/>
     </table>
+    <table name="forms_custom_comments" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
+      <column name="user_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
+      <column name="record_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
+      <column name="cdt" sqlType="DATETIME" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <column name="comment" sqlType="TEXT" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <primary-key columns="id"/>
+      <index name="forms_custom_comments_52103e4c" unique="true" columns="record_id"/>
+      <index name="forms_custom_comments_6340c63c" unique="true" columns="user_id"/>
+    </table>
     <table name="forms_custom_fieldparameter" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <column name="field_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
@@ -77,18 +87,17 @@
       <index name="forms_custom_fieldparameter_aeee0ce4" unique="true" columns="field_id"/>
     </table>
     <table name="forms_custom_record" schema="" catalog="" type="TABLE">
-      <column name="user_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
-      <column name="esign" sqlType="VARCHAR(2000)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
-      <column name="completed" sqlType="BOOL" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
-      <column name="template_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
-      <column name="approved_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="true" jdbcType="4"/>
       <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="true" jdbcType="4"/>
-      <column name="status" sqlType="VARCHAR(1)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
       <column name="cdt" sqlType="DATETIME" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <column name="user_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
+      <column name="status" sqlType="VARCHAR(1)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <column name="esign" sqlType="VARCHAR(2000)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <column name="approved_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="true" jdbcType="4"/>
+      <column name="template_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <primary-key columns="id"/>
       <exported-key name="#FAKE_forms_custom_recorddata_2" table="forms_custom_recorddata" schema="" catalog="" columns="record_id"/>
-      <index name="forms_custom_record_43d23afc" unique="true" columns="template_id"/>
       <index name="forms_custom_record_6340c63c" unique="true" columns="user_id"/>
+      <index name="forms_custom_record_43d23afc" unique="true" columns="template_id"/>
     </table>
     <table name="forms_custom_recorddata" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
