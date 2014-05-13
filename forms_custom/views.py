@@ -23,7 +23,7 @@ def get_form(request, template):
                 if formsetdata.is_valid():
                     rec.cdt = datetime.now()
                     rec.esign = sign
-                    rec.completed = True
+                    rec.status = 'O'
                     rec.save()
                     RecordData.objects.filter(record=rec).delete()
                     x = 0
@@ -32,11 +32,22 @@ def get_form(request, template):
                         x += 1
                     return redirect("/")
                 else:
-                    return render_to_response('multiform.html', {'formFactory': formsetdata, },
+                    comments = rec.get_comments()
+                    return render_to_response('multiform.html', {'formFactory': formsetdata,
+                                                                 'template': templ,
+                                                                 'comments': comments},
                                               context_instance=RequestContext(request))
             else:
-                formfactory = formset()
-                return render_to_response('multiform.html', {'formFactory': formfactory, },
+                if rec.status == 'K':
+                    initial = rec.data_form()
+                    formfactory = formset(initial=initial)
+                    comments = rec.get_comments()
+                else:
+                    formfactory = formset()
+                    comments = None
+                return render_to_response('multiform.html', {'formFactory': formfactory,
+                                                             'template': templ,
+                                                             'comments': comments},
                                           context_instance=RequestContext(request))
 
         else:
@@ -46,17 +57,31 @@ def get_form(request, template):
                 if form.is_valid():
                     rec.cdt = datetime.now()
                     rec.esign = sign
-                    rec.completed = True
+                    rec.status = 'O'
                     rec.save()
                     RecordData.objects.filter(record=rec).delete()
                     form.save(rec)
                     return redirect("/")
                 else:
-                    return render_to_response('form.html', {'form': form, }, context_instance=RequestContext(request))
+                    comments = rec.get_comments()
+                    return render_to_response('form.html', {'form': form,
+                                                            'template': templ,
+                                                            'comments': comments},
+                                              context_instance=RequestContext(request))
             else:
-                form = CustomForm(template=templ)
+                if rec.status == 'K':
+                    initial = rec.data_form()
+                    form = CustomForm(template=templ, initial=initial)
+                    comments = rec.get_comments()
+                else:
+                    form = CustomForm(template=templ)
+                    comments = None
                 form.fields["sign"] = forms.CharField(required=False, widget=HiddenInput)
-                return render_to_response('form.html', {'form': form, }, context_instance=RequestContext(request))
+                return render_to_response('form.html', {'form': form,
+                                                        'template': templ,
+                                                        'comments': comments},
+                                          context_instance=RequestContext(request))
+    return redirect('/')
 
 
 @login_required(login_url='/login/', redirect_field_name=None)
@@ -74,8 +99,19 @@ def form_status(request, pk):
 @login_required(login_url='/login/', redirect_field_name=None)
 def get_record(request, pk):
     record = get_object_or_404(Record, pk=pk)
-    if 'approve' in request.POST:
-        record.approved = request.user
-        record.status = 'R'
-        record.save()
-    return render_to_response('baseadmin.html', {'record': record}, context_instance=RequestContext(request))
+    comments = None
+    if request.POST:
+        if 'approve' in request.POST:
+            record.approved = request.user
+            record.status = 'R'
+            record.save()
+        if 'revision' in request.POST:
+            record.status = 'K'
+            record.save()
+            comment = request.POST.get('comment', False)
+            if comment:
+                comm = Comments(user=request.user, record=record, comment=comment)
+                comm.save()
+    else:
+        comments = record.get_comments()
+    return render_to_response('baseadmin.html', {'record': record, 'comments': comments}, context_instance=RequestContext(request))

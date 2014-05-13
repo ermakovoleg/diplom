@@ -53,7 +53,7 @@ class Report(models.Model):
 
 class ReportRecord(models.Model):
     report = models.ForeignKey(Report)
-    field = models.ForeignKey(TemplateField)
+    field = models.ForeignKey(TemplateField, limit_choices_to={'template__tableview': False})
 
 
 class ReportMaps(models.Model):

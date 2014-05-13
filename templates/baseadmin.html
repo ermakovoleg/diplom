@@ -50,7 +50,7 @@
                          <tr {% if record.status != 'W' %} onclick="location.href='/form/record/{{ record.pk }}'{% endif %}">
                             <th>{{ record.user.get_full_name }}</th>
                             <td>{{ record.get_status }}</td>
-                            <td>{% if record.status != 'W' %}{{ record.approved }}{% endif %}</td>
+                            <td>{% if record.approved %}{{ record.approved }}{% else %} - {% endif %}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -64,35 +64,65 @@
             <h3>Пользователь: {{ record.user.get_full_name }}</h3>
             <h4>Дата последнего изменения: {{ record.cdt }}</h4>
             <h4>Статус: {{ record.get_status }}</h4>
-            {% if record.status != 'R' %}
+            {% if record.status == 'O' %}
+                <form method="post"> {% csrf_token %}
 
-            <form method="post"> {% csrf_token %}
-
-                    <input type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg" value="Отправить на доработку" >
-                    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                      <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title" id="myModalLabel">Комментарий к доработке</h4>
+                        <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#revis" value="Отправить на доработку" >
+                        <div class="modal fade bs-example-modal-lg" tabindex="-1" id="revis" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="myModalLabel">Комментарий к доработке</h4>
+                                </div>
+                                <div class="modal-body">
+                                      <textarea class="form-control" rows="6" name="comment"></textarea>
+                                </div>
+                                 <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                                    <button type="submit" name="revision" class="btn btn-success">Отправить</button>
+                                 </div>
                             </div>
-                            <div class="modal-body">
-                                  <textarea class="form-control" rows="6" name="comment"></textarea>
-                            </div>
-                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
-                                <button type="submit" name="revision" class="btn btn-success">Отправить</button>
-                             </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
 
-                <input type="submit" value="Утвердить" name="approve" class="btn btn-success">
-            </form>
+                    <input type="submit" value="Утвердить" name="approve" class="btn btn-success">
+                </form>
+            {% endif %}
+
+            {% if comments %}
+                <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#comment" value="Комментарии" >
+                <div class="modal fade bs-example-modal-lg" id="comment" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">Комментарий к доработке</h4>
+                        </div>
+                        <div class="modal-body">
+                              <table class="table table-hover">
+                                  <thead>
+                                      <tr>
+                                         <th>Комментарий</th>
+                                         <th>Пользователь</th>
+                                         <th>Дата</th>
+                                      </tr>
+                                  </thead>
+                                  {% for comment in comments %}
+                                      <tr>
+                                        <td>{{ comment.comment }}</td>
+                                        <td>{{ comment.user }}</td>
+                                        <td>{{ comment.cdt|date }}</td>
+                                      </tr>
+                                  {% endfor %}
+                              </table>
+                        </div>
+                    </div>
+                  </div>
+                </div>
             {% endif %}
             <br>
             <br>
-
             {% if record.template.tableview %}
                 <table class="table table-hover">
                     <thead>

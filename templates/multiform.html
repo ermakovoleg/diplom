@@ -13,15 +13,25 @@
 
 
           <div class="jumbotron">
+
+            <h2>{{ template.title }}</h2>
+            {% for comment in comments %}
+                    <div class="alert alert-danger fade in alert-block">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <h4>{{ comment.comment }}</h4>
+                        <footer>{{ comment.user }}  {{ comment.cdt|date }}</footer>
+                    </div>
+                {% endfor %}
             <form method="POST" name="DataForm"> {% csrf_token %}  {% comment %}jk{% endcomment %}
             {{ formFactory.management_form }}
                      <table id="tab" class="table table-bordered">
-                        <tr class="affix-top">
-                            {%for label in formFactory|first %}
-                                <th>{{ label.label }}</th>
-                            {% endfor %}
-                        </tr>
-
+                        <thead>
+                             <tr class="affix-top">
+                                {%for label in formFactory|first %}
+                                    <th>{{ label.label }}</th>
+                                {% endfor %}
+                             </tr>
+                        </thead>
                         {% for form in formFactory %}
                             <tr>
                                 {% for field in form %}
@@ -34,18 +44,43 @@
                                 {% endfor %}
                             </tr>
                         {% endfor %}
+                     <tfoot>
+                         <tr class="add-row">
+                             <td colspan="50">
+                                 <a href="javascript:cloneMore('#tab tr', 'form');">Добавить еще один Элемент Формы</a>
+                             </td>
+                         </tr>
+                     </tfoot>
                     </table>
 
                 <div class="form-group">
                     <div class="controls">
-                      <button class="btn btn-primary" type="submit">Ответить</button>
+                      <input type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg" value="Сохранить" >
                     </div>
-                  </div>
+                </div>
 
-                <input type="button" value="Add More" id="add_more" onclick="cloneMore('#tab tr:last', 'form');">
+
+                    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h3 class="modal-title" id="myModalLabel">Электронная цифровая подпись</h3>
+                            </div>
+                            <div class="modal-body">
+                                  <h4>Выберите сертификат подписи</h4>
+                                  <select class="form-control" size="4" name="CertListBox" id="CertListBox"></select>
+                            </div>
+                             <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                                <button type="submit" name="revision" class="btn btn-success">Отправить</button>
+                             </div>
+                        </div>
+                      </div>
+                    </div>
                 <input id="sign" name="sign" type="hidden" value="0">
                 <object id="cadesplugin" type="application/x-cades" class="hiddenObject"></object>
-                <select size="4" name="CertListBox" id="CertListBox"></select>
+
 
             </form>
           </div>

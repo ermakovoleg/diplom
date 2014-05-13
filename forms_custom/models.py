@@ -115,11 +115,33 @@ class Record(models.Model):
 
     def data(self):
         rex = RecordData.objects.filter(record=self)
-        num_lines = rex.aggregate(Max('line'))['line__max']
-        data = []
-        for x in range(num_lines+1):
-            data.append(rex.filter(line=x).order_by('field__tab'))
-        return data
+        if self.template.tableview:
+            num_lines = rex.aggregate(Max('line'))['line__max']
+            data = []
+            for x in range(num_lines+1):
+                data.append(rex.filter(line=x).order_by('field__tab'))
+            return data
+        return rex
+
+    def data_form(self):
+        rex = RecordData.objects.filter(record=self)
+        if self.template.tableview:
+            num_lines = rex.aggregate(Max('line'))['line__max']
+            data = []
+            for x in range(num_lines+1):
+                line = {}
+                for rec in rex.filter(line=x).order_by('field__tab'):
+                    line[rec.field.tag] = rec.value
+                data.append(line)
+            return data
+        else:
+            line = {}
+            for rec in rex.order_by('field__tab'):
+                line[rec.field.tag] = rec.value
+            return line
+
+    def get_comments(self):
+        return Comments.objects.filter(record=self).order_by('-cdt')
 
     def __str__(self):
         return self.user.username+'  ('+self.template.__str__()+') - '+self.cdt.strftime("%Y-%m-%d %H:%M")
@@ -146,3 +168,18 @@ class RecordData(models.Model):
             elif self.value == 'False':
                 return ugettext("Нет")
         return self.value
+
+
+class Comments(models.Model):
+    user = models.ForeignKey(MyUser, verbose_name="пользователь")
+    record = models.ForeignKey(Record)
+    cdt = models.DateTimeField(default=datetime.now)
+    comment = models.TextField()
+
+    def __str__(self):
+        return self.record.__str__() + ' ' + self.user.get_short_name()
+
+    class Meta:
+        verbose_name = 'комментарий'
+        verbose_name_plural = 'комментарии'
+        ordering = ('-cdt',)
