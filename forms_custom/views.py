@@ -1,8 +1,11 @@
 #coding: utf-8
+import csv
 from django.contrib.auth.decorators import login_required
 from django.forms import HiddenInput
+from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
+from setuptools.compat import unicode
 from forms_custom.forms import *
 from forms_custom.models import Template
 from django.forms.formsets import formset_factory
@@ -93,6 +96,26 @@ def form_publish(request):
 @login_required(login_url='/login/', redirect_field_name=None)
 def form_status(request, pk):
     template = get_object_or_404(Template, pk=pk)
+    if request.POST:
+        if 'export' in request.POST:
+            response = HttpResponse(mimetype='text/csv')
+            response['Content-Disposition'] = 'attachment; filename=export.csv'
+            writer = csv.writer(response, delimiter=';', dialect='excel')
+            response.write(u'\ufeff'.encode('utf8'))
+            head = [x.title for x in template.fields()]
+            head.append('Пользователь')
+            writer.writerow(head)
+            for record in template.get_records():
+                if template.tableview:
+                    for line in record.data_form():
+                        temp = [value for key, value in line.items()]
+                        temp.append(record.user.get_full_name())
+                        writer.writerow(temp)
+                else:
+                    temp = [value for key, value in record.data_form().items()]
+                    temp.append(record.user.get_full_name())
+                    writer.writerow(temp)
+            return response
     return render_to_response('baseadmin.html', {'template': template}, context_instance=RequestContext(request))
 
 
@@ -101,6 +124,19 @@ def get_record(request, pk):
     record = get_object_or_404(Record, pk=pk)
     comments = None
     if request.POST:
+        if 'export' in request.POST:
+            response = HttpResponse(mimetype='text/csv')
+            response['Content-Disposition'] = 'attachment; filename=export.csv'
+            writer = csv.writer(response, delimiter=';', dialect='excel')
+            response.write(u'\ufeff'.encode('utf8'))
+            writer.writerow([x.title for x in record.template.fields()])
+            if record.template.tableview:
+                for line in record.data_form():
+                    writer.writerow([value for key, value in line.items()])
+            else:
+                writer.writerow([value for key, value in record.data_form().items()])
+            return response
+
         if 'approve' in request.POST:
             record.approved = request.user
             record.status = 'R'
@@ -115,3 +151,19 @@ def get_record(request, pk):
     else:
         comments = record.get_comments()
     return render_to_response('baseadmin.html', {'record': record, 'comments': comments}, context_instance=RequestContext(request))
+
+
+@login_required(login_url='/login/', redirect_field_name=None)
+def get_xls(request, pk):
+    lists = MyUser.objects.all()
+    response = HttpResponse(mimetype='text/csv')
+
+    filename = "model.csv"
+
+    writer = csv.writer(response)
+    for cdr in lists:
+        writer.writerow([cdr.username+';'+str(cdr.id)+';'+cdr.email])
+
+    response['Content-Disposition'] = 'attachment; filename='+filename
+    response['Content-Type'] = 'application/vnd.ms-excel; charset=utf-16'
+    return response

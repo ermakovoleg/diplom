@@ -86,8 +86,8 @@ function SignBtn_Click(lstid, dataID, SignId) {
         alert("Set data to Sign");
     }
     oStore.Close();
-
-    Verify(document.getElementById(SignId).value, Data());
+    alert(Data1());
+    //Verify(document.getElementById(SignId).value, Data());
     return true;
 }
 
@@ -240,6 +240,30 @@ function Data(){
       }
      return mas;
  }
+
+function Data1(){
+    //var field = $("#data :input:visible")
+    var line = $('#tab tbody tr')
+    var len=line.length;
+    var mas='';
+      for(var i=0;i<len;i++){
+        var fields = $(line[0]).find(':input');
+      }
+     return mas;
+    var val=field[i];
+       var value='';
+          if(val.value){
+             value = val.value;
+
+          }
+          if (value)
+          if(mas){
+               mas+= ','+ val.name+'='+value;
+          }
+          else{
+               mas=val.name+'='+value;
+          }
+}
 
 function Verify(sSignedMessage, dataToVerify) {
 

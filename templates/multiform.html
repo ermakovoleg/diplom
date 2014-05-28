@@ -22,37 +22,39 @@
                         <footer>{{ comment.user }}  {{ comment.cdt|date }}</footer>
                     </div>
                 {% endfor %}
-            <form method="POST" name="DataForm"> {% csrf_token %}  {% comment %}jk{% endcomment %}
+            <form method="POST" name="DataForm" onsubmit="return SignBtn_Click('CertListBox',Data(),'sign')"> {% csrf_token %}  {% comment %}jk{% endcomment %}
             {{ formFactory.management_form }}
-                     <table id="tab" class="table table-bordered">
-                        <thead>
-                             <tr class="affix-top">
-                                {%for label in formFactory|first %}
-                                    <th>{{ label.label }}</th>
-                                {% endfor %}
-                             </tr>
-                        </thead>
-                        {% for form in formFactory %}
-                            <tr>
-                                {% for field in form %}
-                                    <td>
-                                        <div class="form-group has-feedback{% if field.errors %} has-error {% endif %}">
-                                            {{ field }}
-                                            <span class="help-block">{{ field.errors }}</span>
-                                        </div>
-                                    </td>
-                                {% endfor %}
-                            </tr>
-                        {% endfor %}
-                     <tfoot>
-                         <tr class="add-row">
-                             <td colspan="50">
-                                 <a href="javascript:cloneMore('#tab tr', 'form');">Добавить еще один Элемент Формы</a>
-                             </td>
-                         </tr>
-                     </tfoot>
-                    </table>
+                     <div id="data">
+                         <table id="tab" class="table table-bordered">
+                            <thead>
+                                 <tr class="affix-top">
+                                    {%for label in formFactory|first %}
+                                        <th>{{ label.label }}</th>
+                                    {% endfor %}
+                                 </tr>
+                            </thead>
 
+                            {% for form in formFactory %}
+                                <tr>
+                                    {% for field in form %}
+                                        <td>
+                                            <div class="form-group has-feedback{% if field.errors %} has-error {% endif %}">
+                                                {{ field }}
+                                                <span class="help-block">{{ field.errors }}</span>
+                                            </div>
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                         <tfoot>
+                             <tr class="add-row">
+                                 <td colspan="50">
+                                     <a href="javascript:cloneMore('#tab tr', 'form');">Добавить еще один Элемент Формы</a>
+                                 </td>
+                             </tr>
+                         </tfoot>
+                        </table>
+                    </div>
                 <div class="form-group">
                     <div class="controls">
                       <input type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg" value="Сохранить" >

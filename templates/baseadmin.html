@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% block head %}
+    <script language="javascript" src="/static/js/NativeBridge.js"></script>
+    <script language="javascript" src="/static/js/cript.js"></script>
+{% endblock %}
+
 {% block navbar %}
     {{ block.super }}
 {% endblock %}
@@ -37,6 +42,9 @@
     {% if template %}
         <div class="jumbotron">
             <h2>{{ template.title }}</h2>
+            <form method="post"> {% csrf_token %}
+                <input type="submit" value="Экспорт в CSV" name="export">
+            </form>
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -64,9 +72,10 @@
             <h3>Пользователь: {{ record.user.get_full_name }}</h3>
             <h4>Дата последнего изменения: {{ record.cdt }}</h4>
             <h4>Статус: {{ record.get_status }}</h4>
+            <h4 id="sign"></h4>
             {% if record.status == 'O' %}
                 <form method="post"> {% csrf_token %}
-
+                        <button type="submit" name="export" class="btn btn-success">Экспортировать в CSV</button>
                         <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#revis" value="Отправить на доработку" >
                         <div class="modal fade bs-example-modal-lg" tabindex="-1" id="revis" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                           <div class="modal-dialog modal-lg">
@@ -151,5 +160,11 @@
                 {% endfor %}
             {% endif %}
         </div>
+
+        <script language="JavaScript">
+            CheckForPlugIn()
+            $('label[for="id_sign"]').remove();
+        </script>
+
     {% endif %}
 {% endblock %}

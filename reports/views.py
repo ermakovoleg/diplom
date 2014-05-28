@@ -22,4 +22,5 @@ def maps(request, pk):
         'report': report,
         'records': records
     }
-    return render_to_response('maps.html',context, context_instance=RequestContext(request))
+    return render_to_response('maps.html', context, context_instance=RequestContext(request))
+
