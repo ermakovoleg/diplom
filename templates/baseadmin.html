@@ -26,7 +26,7 @@
                 </thead>
                 <tbody>
                     {% for template in templates %}
-                         <tr onclick="location.href='/form/status/{{ template.pk }}'">
+                         <tr onclick="location.href='/form/status/{{ template.pk }}'" style="cursor: pointer">
                             <th>{{ template.pk }}</th>
                             <td>{{ template.title }}</td>
                             <td>{{ template.cdt }}</td>
@@ -55,7 +55,7 @@
                 </thead>
                 <tbody>
                     {% for record in template.get_records %}
-                         <tr {% if record.status != 'W' %} onclick="location.href='/form/record/{{ record.pk }}'{% endif %}">
+                         <tr {% if record.status != 'W' %} onclick="location.href='/form/record/{{ record.pk }}'{% endif %}" style="cursor: pointer">
                             <th>{{ record.user.get_full_name }}</th>
                             <td>{{ record.get_status }}</td>
                             <td>{% if record.approved %}{{ record.approved }}{% else %} - {% endif %}</td>
@@ -160,7 +160,7 @@
                 {% endfor %}
             {% endif %}
         </div>
-
+        <object id="cadesplugin" type="application/x-cades" class="hiddenObject"></object>
         <script language="JavaScript">
             CheckForPlugIn()
             $('label[for="id_sign"]').remove();

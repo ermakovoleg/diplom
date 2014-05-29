@@ -151,19 +151,3 @@ def get_record(request, pk):
     else:
         comments = record.get_comments()
     return render_to_response('baseadmin.html', {'record': record, 'comments': comments}, context_instance=RequestContext(request))
-
-
-@login_required(login_url='/login/', redirect_field_name=None)
-def get_xls(request, pk):
-    lists = MyUser.objects.all()
-    response = HttpResponse(mimetype='text/csv')
-
-    filename = "model.csv"
-
-    writer = csv.writer(response)
-    for cdr in lists:
-        writer.writerow([cdr.username+';'+str(cdr.id)+';'+cdr.email])
-
-    response['Content-Disposition'] = 'attachment; filename='+filename
-    response['Content-Type'] = 'application/vnd.ms-excel; charset=utf-16'
-    return response
