@@ -54,7 +54,7 @@ class TemplateField(models.Model):
 
     FieldTypes = (('T', 'Текст'), ('S', 'Строка'), ('B', 'Bool'), ('E', 'E-mail'),
                   ('U', 'URL'), ('C', 'Выбор'), ('M', 'Множественный выбор'),
-                  ('P', 'Точка'), ('L', 'Линия'), ('Z', 'Полигон'))
+                  ('P', 'Точка'), ('L', 'Линия'), ('Z', 'Полигон'), ('D', 'Дата'))
 
     template = models.ForeignKey(Template, verbose_name="форма запроса")
     tag = models.SlugField(max_length=100, default=set_tag, editable=False)

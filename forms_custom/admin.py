@@ -19,8 +19,7 @@ class TemplateAdmin(admin.ModelAdmin):
             print('наша функция')
 
     def save_model(self, request, obj, form, change):
-        if getattr(obj, 'creator', None) is None:
-            obj.author = request.user2
+        obj.creator = request.user
         obj.save()
 
     actions = [export, ]

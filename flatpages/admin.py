@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.contrib import admin
 from django.forms import ModelForm
 from suit_redactor.widgets import RedactorWidget

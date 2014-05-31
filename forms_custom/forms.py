@@ -113,6 +113,12 @@ class CustomForm(forms.Form):
                                                          required=field.required,
                                                          help_text=help_text,
                                                          widget=widget)
+            elif field.type == "D":
+                widget = forms.DateInput(attrs={'class': 'form-control', 'type': 'date'})
+                self.fields[field.tag] = forms.CharField(label=field.title,
+                                                         required=field.required,
+                                                         help_text=help_text,
+                                                         widget=widget)
 
     def save(self, record, i=None):
         data = self.cleaned_data

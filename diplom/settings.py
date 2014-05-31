@@ -73,7 +73,19 @@ AUTH_USER_MODEL = 'user.MyUser'
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
+''''default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
 
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'diplom',
+        'USER': 'diplom',
+        'PASSWORD': '123456',
+        'HOST': '90.189.24.131',
+
+
+    '''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
