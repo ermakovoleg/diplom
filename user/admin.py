@@ -65,15 +65,15 @@ class MyUserAdmin(UserAdmin):
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
 
-    list_display = ('username', 'locality', 'email', 'is_superuser')
-    list_filter = ('is_superuser', 'locality',)
-    search_fields = ('email', 'username',)
-    ordering = ('username', 'email',)
+    list_display = ('fio', 'username', 'locality', 'email', 'is_superuser')
+    list_filter = ('is_superuser', 'locality', 'fio')
+    search_fields = ('email', 'username', 'fio')
+    ordering = ('fio', 'email',)
     filter_horizontal = ()
 
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Personal info', {'fields': ('email', 'locality')}),
+        ('Personal info', {'fields': ('fio', 'email', 'locality')}),
         ('Права пользователя', {'fields': ('is_admin', 'is_superuser', 'groups')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -81,7 +81,7 @@ class MyUserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'locality', 'email', 'password1', 'password2')}
+            'fields': ('username', 'fio', 'locality', 'email', 'password1', 'password2')}
         ),
     )
 
