@@ -34,20 +34,21 @@
                   </div>
                   <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-
+                    {% if user.is_staff %}
+                        <li><a href="/form/publish/">Опубликованные формы</a></li>
+                        <li><a href="/report/">Отчеты</a></li>
+                        <li class="dropdown">
+                          <a href="/" class="dropdown-toggle" data-toggle="dropdown">Отчеты<b class="caret"></b></a>
+                          <ul class="dropdown-menu">
+                            {% for rep in reports %}
+                                 <li><a href="/report/{{ rep.pk }}/">{{ rep.title }}</a></li>
+                            {% endfor %}
+                          </ul>
+                         </li>
+                    {% endif %}
                         <li><a href="/help/">Справка</a></li>
                         {% block navbar %}
-                            {% if user.is_staff %}
-                                <li><a href="/form/publish/">Опубликованные формы</a></li>
-                                <li class="dropdown">
-                                  <a href="/" class="dropdown-toggle" data-toggle="dropdown">Отчеты<b class="caret"></b></a>
-                                  <ul class="dropdown-menu">
-                                    {% for rep in reports %}
-                                         <li><a href="/report/{{ rep.pk }}/">{{ rep.title }}</a></li>
-                                    {% endfor %}
-                                  </ul>
-                                 </li>
-                            {% endif %}
+
                         {%endblock %}
 
                     </ul>

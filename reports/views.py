@@ -8,7 +8,14 @@ def get_report(request, pk):
     report = get_object_or_404(Report, pk=pk)
     data, title = report.get_peportrecord()
 
-    return render_to_response('report.html', {'data': data, 'title': title})
+    return render_to_response('report.html', {'data': data, 'title': title}, context_instance=RequestContext(request))
+
+
+def get_reports(request):
+    reports = Report.objects.all()
+    reports_map = ReportMaps.objects.all()
+    return render_to_response('reports.html', {'reports': reports, 'reports_map': reports_map},
+                              context_instance=RequestContext(request))
 
 
 @login_required(login_url='/login/', redirect_field_name=None)
