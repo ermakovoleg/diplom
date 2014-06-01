@@ -123,6 +123,7 @@ def form_status(request, pk):
 def get_record(request, pk):
     record = get_object_or_404(Record, pk=pk)
     comments = None
+    print(record.esign)
     if request.POST:
         if 'export' in request.POST:
             response = HttpResponse(mimetype='text/csv')
@@ -150,4 +151,7 @@ def get_record(request, pk):
                 comm.save()
     else:
         comments = record.get_comments()
-    return render_to_response('baseadmin.html', {'record': record, 'comments': comments}, context_instance=RequestContext(request))
+    return render_to_response('baseadmin.html', {'record': record,
+                                                 'comments': comments,
+                                                 'sign_value':record.get_sign_value()},
+                              context_instance=RequestContext(request))

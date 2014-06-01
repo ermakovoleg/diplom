@@ -146,6 +146,16 @@ class Record(models.Model):
     def __str__(self):
         return self.user.username+'  ('+self.template.__str__()+') - '+self.cdt.strftime("%Y-%m-%d %H:%M")
 
+    def get_sign_value(self):
+        s = ''
+        if self.template.tableview:
+                for line in self.data():
+                    temp = [value.get_value() for value in line]
+        else:
+            temp = [value.get_value() for value in self.data()]
+        s = ''.join(temp)
+        return s
+
 
 class RecordData(models.Model):
     record = models.ForeignKey(Record)
@@ -156,9 +166,9 @@ class RecordData(models.Model):
     def __unicode__(self):
         return self.value + " " + self.record.__str__() + " " + self.line.__str__()
 
-    def decoded_value(self):
+    def get_value(self):
         if self.field.type == 'M':
-            return eval(self.value)
+            return ','.join(eval(self.value))
         return self.value
 
     def rendered_value(self):

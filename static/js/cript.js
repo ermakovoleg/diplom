@@ -63,7 +63,7 @@ function SignBtn_Click(lstid, dataID, SignId) {
 
     var CADES_BES = 1;
     var CADESCOM_BASE64_TO_BINARY = 1;
-
+    alert('ewr');
     //try {
     if (txtDataToSign) {
         // Данные на подпись ввели
@@ -81,13 +81,11 @@ function SignBtn_Click(lstid, dataID, SignId) {
         document.getElementById(SignId).value = sSignedData;
 
 
-
     } else {
         alert("Set data to Sign");
     }
     oStore.Close();
-    alert(Data1());
-    //Verify(document.getElementById(SignId).value, Data());
+
     return true;
 }
 
@@ -213,56 +211,28 @@ function GetErrorMessage(e) {
 
 
 
-//Получаем данные всех полей модели (параметр=значение)
+//Получаем данные всех полей модели
 function Data(){
-    var len=document.DataForm.elements.length;
+    var fields = $('#tab tbody tr :input');
+    var len=fields.length;
     var mas='';
       for(var i=0;i<len;i++){
-       var val=document.DataForm.elements[i];
-       var value1;
-         if (val.name!='csrfmiddlewaretoken' && val.name!='CertListBox' && val.name!='' && val.id!='sign'){
-           if(val.checked){
-               value1 = val.checked;
-           }
-             else
-           {
-               value1 = val.checked;
-               if(value1 === undefined){value1 = val.value;}
-           }
-           if(mas){
-               mas+= ','+ val.name+'='+value1;
-           }
-           else{
-               mas=val.name+'='+value1;
-           }
-       }
-
+          switch (fields[i].type) {
+              case 'checkbox':
+                    if (fields[i].checked){
+                    mas = mas + "True";
+                    }
+                      break;
+              case 'select-multiple':
+                  if ( $(fields[i]).val() != null){
+                      mas = mas + $(fields[i]).val();
+                  }
+                  break;
+              default:
+                mas = mas + fields[i].value;
+          }
       }
-     return mas;
- }
-
-function Data1(){
-    //var field = $("#data :input:visible")
-    var line = $('#tab tbody tr')
-    var len=line.length;
-    var mas='';
-      for(var i=0;i<len;i++){
-        var fields = $(line[0]).find(':input');
-      }
-     return mas;
-    var val=field[i];
-       var value='';
-          if(val.value){
-             value = val.value;
-
-          }
-          if (value)
-          if(mas){
-               mas+= ','+ val.name+'='+value;
-          }
-          else{
-               mas=val.name+'='+value;
-          }
+    return mas;
 }
 
 function Verify(sSignedMessage, dataToVerify) {

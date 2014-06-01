@@ -58,8 +58,8 @@ class MyUserAdmin(UserAdmin):
     # The forms to add and change user instances
     form = UserChangeForm
     add_form = UserCreationForm
-    change_password_form = AdminPasswordChangeForm
-    change_user_password_template = 'admin/password_change_password_form.html'
+    #change_password_form = AdminPasswordChangeForm
+    #change_user_password_template = 'admin/password_change_password_form.html'
 
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
@@ -69,7 +69,7 @@ class MyUserAdmin(UserAdmin):
     list_filter = ('is_superuser', 'locality', 'fio')
     search_fields = ('email', 'username', 'fio')
     ordering = ('fio', 'email',)
-    filter_horizontal = ()
+    filter_horizontal = ('groups', 'user_permissions',)
 
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
@@ -118,6 +118,7 @@ class GroupMetaForm(ModelForm):
 
 class GroupMetaAdmin(admin.ModelAdmin):
     form = GroupMetaForm
+    filter_horizontal = ('permissions',)
 
 admin.site.register(MyUser, MyUserAdmin)
 admin.site.register(Locality, LocalityAdmin)

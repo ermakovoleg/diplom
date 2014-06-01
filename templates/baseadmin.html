@@ -72,6 +72,7 @@
             <h3>Пользователь: {{ record.user.get_full_name }}</h3>
             <h4>Дата последнего изменения: {{ record.cdt }}</h4>
             <h4>Статус: {{ record.get_status }}</h4>
+            <h4>ЭЦП:<div id="verify"></div> </h4>
             <h4 id="sign"></h4>
             {% if record.status == 'O' %}
                 <form method="post"> {% csrf_token %}
@@ -161,10 +162,14 @@
             {% endif %}
         </div>
         <object id="cadesplugin" type="application/x-cades" class="hiddenObject"></object>
+        <input id="esign" type="hidden" value='{{ record.esign }}'>
+        <input id="data" type="hidden" value='{{ sign_value }}'>
         <script language="JavaScript">
-            CheckForPlugIn()
-            $('label[for="id_sign"]').remove();
+            document.getElementById('verify').innerHTML = Verify(document.getElementById('esign').value,document.getElementById('data').value);
         </script>
 
     {% endif %}
 {% endblock %}
+
+"Строкаtrueтекст.ru123@qwe.ashttps://github.com/fakegreenbrain/diplom/issues?milestone=1&state=open1a,b,c[ 52.0376, 113.492 ][ [ 52.0280, 113.492 ], [ 52.0367, 113.491 ], [ 52.0374, 113.512 ], [ 52.0283, 113.510 ] ][ [ [ 52.0314, 113.492 ], [ 52.0380, 113.497 ], [ 52.0304, 113.506 ], [ 52.0314, 113.492 ] ] ]2014-06-01"
+"СтрокаTrueтекст.ru123@qwe.ashttps://github.com/fakegreenbrain/diplom/issues?milestone=1&state=open1a,b,c[ 52.0376, 113.492 ][ [ 52.0280, 113.492 ], [ 52.0367, 113.491 ], [ 52.0374, 113.512 ], [ 52.0283, 113.510 ] ][ [ [ 52.0314, 113.492 ], [ 52.0380, 113.497 ], [ 52.0304, 113.506 ], [ 52.0314, 113.492 ] ] ]2014-06-01"

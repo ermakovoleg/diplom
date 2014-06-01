@@ -76,7 +76,7 @@ class CustomForm(forms.Form):
                                                           required=field.required,
                                                           widget=widget)
             elif field.type == "U":
-                widget = forms.TextInput(attrs={'class': 'form-control'})
+                widget = forms.URLInput(attrs={'class': 'form-control'})
                 self.fields[field.tag] = forms.URLField(label=field.title,
                                                         required=field.required,
                                                         help_text=help_text,
