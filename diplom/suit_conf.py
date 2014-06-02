@@ -1,6 +1,6 @@
 #coding: utf-8
 SUIT_CONFIG = {
-    'ADMIN_NAME': 'Диплом "Соберем все!"',
+    'ADMIN_NAME': 'АССиОД "Край"',
     'HEADER_DATE_FORMAT': 'l, j F Y',
     'SEARCH_URL': '',
 

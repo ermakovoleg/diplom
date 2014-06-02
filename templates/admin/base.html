@@ -201,7 +201,22 @@
 {% endblock %}
 
   <script src="{% static 'suit/js/suit.js' %}"></script>
-  {% block extrajs %}{% endblock %}
+  {% block extrajs %}
+      <script language="JavaScript">
+        if ($('a:contains(Reports)')[0]){$('a:contains(Reports)')[0].innerHTML = 'Отчеты';}
+        if ($('.breadcrumb li:contains(Reports)')[0]){$('.breadcrumb li:contains(Reports)')[0].innerHTML = 'Отчеты';}
+
+        if ($('a:contains(Forms_Custom)')[0]){$('a:contains(Forms_Custom)')[0].innerHTML = 'Запросы';}
+        if ($('a:contains(Forms_custom)')[0]){$('a:contains(Forms_custom)')[0].innerHTML = 'Запросы';}
+        if ($('.breadcrumb li:contains(Forms_Custom)')[0]){$('.breadcrumb li:contains(Forms_Custom)')[0].innerHTML = 'Запросы';}
+
+        if ($('a:contains(Flatpages)')[0]){$('a:contains(Flatpages)')[0].innerHTML = 'Простые страницы';}
+        if ($('.breadcrumb li:contains(Flatpages)')[0]){$('.breadcrumb li:contains(Flatpages)')[0].innerHTML = 'Простые страницы';}
+
+        if ($('tr th:contains(Records)')[0]){$('tr th:contains(Records)')[0].innerHTML = 'Записи';}
+        if ($('.breadcrumb li:contains(Records)')[0]){$('.breadcrumb li:contains(Records)')[0].innerHTML = 'Записи';}
+      </script>
+  {% endblock %}
 
 </body>
 </html>
