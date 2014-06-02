@@ -67,7 +67,7 @@ class MyUserManager(BaseUserManager):
 class MyUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=40, unique=True)
     locality = models.ForeignKey(Locality, verbose_name="Населенный пункт", blank=True, null=True)
-    email = models.EmailField(verbose_name='email', max_length=255)
+    email = models.EmailField(verbose_name='email', max_length=255, unique=True)
     fio = models.CharField(max_length=300, verbose_name='Ф.И.О.')
 
     is_active = models.BooleanField(default=True, editable=False)
