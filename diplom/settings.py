@@ -1,13 +1,3 @@
-"""
-Django settings for diplom project.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/1.6/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.6/ref/settings/
-"""
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
@@ -25,6 +15,9 @@ SECRET_KEY = 'k#@#wmsxa)@^0u61em8yk6779@5knkt@!b&*g$ywh%ylow6v+n'
 DEBUG = True
 
 TEMPLATE_DEBUG = True
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 TEMPLATE_DIRS = (
     'templates/',
@@ -116,3 +109,4 @@ STATICFILES_DIRS = (
 STATIC_URL = '/static/'
 
 STATIC_ROOT = 'static'
+

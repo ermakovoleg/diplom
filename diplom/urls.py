@@ -10,6 +10,7 @@ urlpatterns = patterns('',
 
     url(r'^form/', include('forms_custom.urls')),
     url(r'^report/', include('reports.urls')),
+    url(r'^user/', include('user.urls')),
 
     url(r'^login/', 'user.views.login_view'),
     url(r'^logout/', 'user.views.logout_view'),

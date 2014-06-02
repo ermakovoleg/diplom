@@ -3,13 +3,16 @@
 {% block content %}
     <div class="jumbotron">
         <h4>Отчеты</h4>
-        {% for report in reports %}
-            <a href="{{ report.pk }}/">{{ report.title }}</a>
-        {% endfor %}
+        <ul>
+            {% for report in reports %}
+                <li><a href="{{ report.pk }}/">{{ report.title }}</a></li>
+            {% endfor %}
+        </ul>
         <h4>Отчеты на картах</h4>
-        {% for report in reports_map %}
-            <a href="maps/{{ report.pk }}/">{{ report.title }}</a>
-        {% endfor %}
+        <ul>
+            {% for report in reports_map %}
+                <li><a href="maps/{{ report.pk }}/">{{ report.title }}</a></li>
+            {% endfor %}
+        </ul>
     </div>
-
 {% endblock %}

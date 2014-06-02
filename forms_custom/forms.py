@@ -1,4 +1,4 @@
-#codind utf-8
+# codind utf-8
 from datetime import datetime
 from django import forms
 from django.forms.formsets import BaseFormSet
@@ -27,13 +27,14 @@ class CustomForm(forms.Form):
                     help_text = parameter.value
 
             if field.type == "B":
+
                 self.fields[field.tag] = forms.BooleanField(label=field.title,
                                                             required=False,
                                                             help_text=help_text,
-                                                            widget=forms.CheckboxInput())#attrs={'class': 'form-control'}))
+                                                            widget=forms.CheckboxInput(attrs={'class': 'my-form', 'style': 'min-width:50px'}))
             elif field.type == "S":
                 if widget == None:
-                    widget = forms.TextInput(attrs={'class': 'form-control'})
+                    widget = forms.TextInput(attrs={'class': 'my-form'})
                 self.fields[field.tag] = forms.CharField(label=field.title,
                                                          required=field.required,
                                                          help_text=help_text,
@@ -41,8 +42,8 @@ class CustomForm(forms.Form):
 
             elif field.type == "T":
                 if widget == None:
-                    #widget = forms.Textarea(attrs={'class': 'form-control'})
-                    widget = AutosizedTextarea(attrs={'class': 'form-control'})
+                    #widget = forms.Textarea(attrs={'class': 'my-form'})
+                    widget = AutosizedTextarea(attrs={'class': 'my-form'})
                 self.fields[field.tag] = forms.CharField(label=field.title,
                                                          required=field.required,
                                                          help_text=help_text,
@@ -53,7 +54,7 @@ class CustomForm(forms.Form):
                 for parameter in field.parameters():
                     if parameter.tag == "choice":
                         choices.append((parameter.value, parameter.value))
-                widget = forms.Select(attrs={'class': 'form-control'})
+                widget = forms.Select(attrs={'class': 'my-form'})
                 self.fields[field.tag] = forms.ChoiceField(choices=choices,
                                                            help_text=help_text,
                                                            label=field.title,
@@ -63,27 +64,28 @@ class CustomForm(forms.Form):
                 for parameter in field.parameters():
                     if parameter.tag == "choice":
                         choices.append((parameter.value, parameter.value))
-                widget = forms.SelectMultiple(attrs={'class': 'form-control', 'multiple': ''})
+                widget = forms.SelectMultiple(
+                    attrs={'class': 'my-form', 'multiple': ''})
                 self.fields[field.tag] = forms.MultipleChoiceField(choices=choices,
                                                                    help_text=help_text,
                                                                    label=field.title,
                                                                    widget=widget,
                                                                    required=False)
             elif field.type == "E":
-                widget = forms.EmailInput(attrs={'class': 'form-control'})
+                widget = forms.EmailInput(attrs={'class': 'my-form'})
                 self.fields[field.tag] = forms.EmailField(label=field.title,
                                                           help_text=help_text,
                                                           required=field.required,
                                                           widget=widget)
             elif field.type == "U":
-                widget = forms.URLInput(attrs={'class': 'form-control'})
+                widget = forms.URLInput(attrs={'class': 'my-form'})
                 self.fields[field.tag] = forms.URLField(label=field.title,
                                                         required=field.required,
                                                         help_text=help_text,
                                                         widget=widget)
             elif field.type == "P":
                 if widget == None:
-                    widget = forms.TextInput(attrs={'class': 'form-control',
+                    widget = forms.TextInput(attrs={'class': 'my-form',
                                                     'onclick': "openmap('P',this); input=this;",
                                                     "data-toggle": "modal",
                                                     "data-target": "#myModal"})
@@ -94,7 +96,7 @@ class CustomForm(forms.Form):
 
             elif field.type == "L":
                 if widget == None:
-                    widget = forms.TextInput(attrs={'class': 'form-control',
+                    widget = forms.TextInput(attrs={'class': 'my-form',
                                                     'onclick': "openmap('L',this); input=this;",
                                                     "data-toggle": "modal",
                                                     "data-target": "#myModal"})
@@ -105,7 +107,7 @@ class CustomForm(forms.Form):
 
             elif field.type == "Z":
                 if widget == None:
-                    widget = forms.TextInput(attrs={'class': 'form-control',
+                    widget = forms.TextInput(attrs={'class': 'my-form',
                                                     'onclick': "openmap('Z',this); input=this;",
                                                     "data-toggle": "modal",
                                                     "data-target": "#myModal"})
@@ -114,7 +116,7 @@ class CustomForm(forms.Form):
                                                          help_text=help_text,
                                                          widget=widget)
             elif field.type == "D":
-                widget = forms.DateInput(attrs={'class': 'form-control', 'type': 'date'})
+                widget = forms.DateInput(attrs={'class': 'my-form', 'type': 'date'})
                 self.fields[field.tag] = forms.CharField(label=field.title,
                                                          required=field.required,
                                                          help_text=help_text,

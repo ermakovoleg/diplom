@@ -16,24 +16,22 @@
             <br>
             <table class="table table-hover">
                 <thead>
-                    <tr>
-                        <th>№</th>
-                        <th>Название</th>
-                        <th>Дата создания</th>
-                        <th>Статус</th>
-                        <th>Создал</th>
-                    </tr>
+                <tr>
+                    <th>№</th>
+                    <th>Название</th>
+                    <th>Дата создания</th>
+                    <th>Создал</th>
+                </tr>
                 </thead>
                 <tbody>
-                    {% for template in templates %}
-                         <tr onclick="location.href='/form/status/{{ template.pk }}'" style="cursor: pointer">
-                            <th>{{ template.pk }}</th>
-                            <td>{{ template.title }}</td>
-                            <td>{{ template.cdt }}</td>
-                            <td>Хорошо</td>
-                            <td>{{ template.creator}}</td>
-                        </tr>
-                    {% endfor %}
+                {% for template in templates %}
+                    <tr onclick="location.href='/form/status/{{ template.pk }}'" style="cursor: pointer">
+                        <th>{{ template.pk }}</th>
+                        <td>{{ template.title }}</td>
+                        <td>{{ template.cdt|date:"SHORT_DATE_FORMAT" }}</td>
+                        <td>{{ template.creator.get_fio }}</td>
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -41,26 +39,31 @@
 
     {% if template %}
         <div class="jumbotron">
-            <h2>{{ template.title }}</h2>
+            <h2>{{ template.title }}
+                <button type="submit" name="export" class="btn btn-primary btn-xs">
+                    Экспорт в CSV <span class="glyphicon glyphicon-download-alt"></span>
+                </button>
+            </h2>
             <form method="post"> {% csrf_token %}
-                <input type="submit" value="Экспорт в CSV" name="export">
+
             </form>
             <table class="table table-hover">
                 <thead>
-                    <tr>
-                        <th>Пользователь</th>
-                        <th>Статус</th>
-                        <th>Утвердил</th>
-                    </tr>
+                <tr>
+                    <th>Пользователь</th>
+                    <th>Статус</th>
+                    <th>Утвердил</th>
+                </tr>
                 </thead>
                 <tbody>
-                    {% for record in template.get_records %}
-                         <tr {% if record.status != 'W' %} onclick="location.href='/form/record/{{ record.pk }}'{% endif %}" style="cursor: pointer">
-                            <th>{{ record.user.get_full_name }}</th>
-                            <td>{{ record.get_status }}</td>
-                            <td>{% if record.approved %}{{ record.approved }}{% else %} - {% endif %}</td>
-                        </tr>
-                    {% endfor %}
+                {% for record in template.get_records %}
+                    <tr {% if record.status != 'W' %} onclick="location.href='/form/record/{{ record.pk }}'{% endif %}"
+                            style="cursor: pointer">
+                        <th>{{ record.user.get_fio }}</th>
+                        <td>{{ record.get_status }}</td>
+                        <td>{% if record.approved %}{{ record.approved.get_fio }}{% else %} - {% endif %}</td>
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -68,67 +71,83 @@
 
     {% if record %}
         <div class="jumbotron">
-            <h2>{{ record.template.title }}</h2>
-            <h3>Пользователь: {{ record.user.get_full_name }}</h3>
+            <h2>{{ record.template.title }}
+                <button type="submit" name="export" class="btn btn-primary btn-xs" form="record_form">
+                    Экспорт в CSV <span class="glyphicon glyphicon-download-alt"></span>
+                </button>
+            </h2>
+            <h3>Пользователь: {{ record.user.get_fio }} {{ record.user.get_locality }}</h3>
             <h4>Дата последнего изменения: {{ record.cdt }}</h4>
             <h4>Статус: {{ record.get_status }}</h4>
-            <h4>ЭЦП:<div id="verify"></div> </h4>
+            <h4 id="verify">Проверка ЭЦП: </h4>
             <h4 id="sign"></h4>
             {% if record.status == 'O' %}
-                <form method="post"> {% csrf_token %}
-                        <button type="submit" name="export" class="btn btn-success">Экспортировать в CSV</button>
-                        <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#revis" value="Отправить на доработку" >
-                        <div class="modal fade bs-example-modal-lg" tabindex="-1" id="revis" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                          <div class="modal-dialog modal-lg">
+                <form method="post" id="record_form"> {% csrf_token %}
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group">
+                            <input type="submit" value="Утвердить" name="approve" class="btn btn-success">
+                            <input type="button" class="btn btn-danger" data-toggle="modal" data-target="#revis"
+                                   value="Отправить на доработку">
+                        </div>
+                        {% if comments %}
+                            <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#comment"
+                                   value="Комментарии">
+                        {% endif %}
+                    </div>
+                    <div class="modal fade bs-example-modal-lg" tabindex="-1" id="revis" role="dialog"
+                         aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-hidden="true">&times;</button>
                                     <h4 class="modal-title" id="myModalLabel">Комментарий к доработке</h4>
                                 </div>
                                 <div class="modal-body">
-                                      <textarea class="form-control" rows="6" name="comment"></textarea>
+                                    <textarea class="form-control" rows="6" name="comment"></textarea>
                                 </div>
-                                 <div class="modal-footer">
+                                <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
                                     <button type="submit" name="revision" class="btn btn-success">Отправить</button>
-                                 </div>
+                                </div>
                             </div>
-                          </div>
                         </div>
+                    </div>
 
-                    <input type="submit" value="Утвердить" name="approve" class="btn btn-success">
+
                 </form>
             {% endif %}
 
             {% if comments %}
-                <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#comment" value="Комментарии" >
-                <div class="modal fade bs-example-modal-lg" id="comment" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title" id="myModalLabel">Комментарий к доработке</h4>
-                        </div>
-                        <div class="modal-body">
-                              <table class="table table-hover">
-                                  <thead>
-                                      <tr>
-                                         <th>Комментарий</th>
-                                         <th>Пользователь</th>
-                                         <th>Дата</th>
-                                      </tr>
-                                  </thead>
-                                  {% for comment in comments %}
-                                      <tr>
-                                        <td>{{ comment.comment }}</td>
-                                        <td>{{ comment.user }}</td>
-                                        <td>{{ comment.cdt|date }}</td>
-                                      </tr>
-                                  {% endfor %}
-                              </table>
+                <div class="modal fade bs-example-modal-lg" id="comment" tabindex="-1" role="dialog"
+                     aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"
+                                        aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="myModalLabel">Комментарий к доработке</h4>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Комментарий</th>
+                                        <th>Пользователь</th>
+                                        <th>Дата</th>
+                                    </tr>
+                                    </thead>
+                                    {% for comment in comments %}
+                                        <tr>
+                                            <td>{{ comment.comment }}</td>
+                                            <td>{{ comment.user }}</td>
+                                            <td>{{ comment.cdt|date }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
                         </div>
                     </div>
-                  </div>
                 </div>
             {% endif %}
             <br>
@@ -136,27 +155,27 @@
             {% if record.template.tableview %}
                 <table class="table table-hover">
                     <thead>
-                        <tr>
-                            {% for field in record.template.fields %}
-                                <th>{{ field.title }}</th>
-                            {% endfor %}
-                        </tr>
+                    <tr>
+                        {% for field in record.template.fields %}
+                            <th>{{ field.title }}</th>
+                        {% endfor %}
+                    </tr>
                     </thead>
                     <tbody>
-                        {% for datas in record.data %}
-                             <tr>
-                                {% for data in datas %}
-                                    <td>{{ data.value }}</td>
-                                {% endfor %}
-                             </tr>
-                        {% endfor %}
+                    {% for datas in record.data %}
+                        <tr>
+                            {% for data in datas %}
+                                <td>{{ data.value }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             {% else %}
                 {% for data in record.data %}
                     <p>{{ data.field.title }}</p>
                     <blockquote>
-                         <p> {{ data.value }} </p>
+                        <p> {{ data.value }} </p>
                     </blockquote>
                 {% endfor %}
             {% endif %}
@@ -165,11 +184,13 @@
         <input id="esign" type="hidden" value='{{ record.esign }}'>
         <input id="data" type="hidden" value='{{ sign_value }}'>
         <script language="JavaScript">
-            document.getElementById('verify').innerHTML = Verify(document.getElementById('esign').value,document.getElementById('data').value);
+            if (Verify(document.getElementById('esign').value, document.getElementById('data').value)) {
+                document.getElementById('verify').innerHTML += '<span class="glyphicon glyphicon-ok" style="color:#008000"></span>'
+            }
+            else {
+                document.getElementById('verify').innerHTML += '<span class="glyphicon glyphicon-remove" style="color:#FF0000"></span>'
+            }
         </script>
 
     {% endif %}
 {% endblock %}
-
-"Строкаtrueтекст.ru123@qwe.ashttps://github.com/fakegreenbrain/diplom/issues?milestone=1&state=open1a,b,c[ 52.0376, 113.492 ][ [ 52.0280, 113.492 ], [ 52.0367, 113.491 ], [ 52.0374, 113.512 ], [ 52.0283, 113.510 ] ][ [ [ 52.0314, 113.492 ], [ 52.0380, 113.497 ], [ 52.0304, 113.506 ], [ 52.0314, 113.492 ] ] ]2014-06-01"
-"СтрокаTrueтекст.ru123@qwe.ashttps://github.com/fakegreenbrain/diplom/issues?milestone=1&state=open1a,b,c[ 52.0376, 113.492 ][ [ 52.0280, 113.492 ], [ 52.0367, 113.491 ], [ 52.0374, 113.512 ], [ 52.0283, 113.510 ] ][ [ [ 52.0314, 113.492 ], [ 52.0380, 113.497 ], [ 52.0304, 113.506 ], [ 52.0314, 113.492 ] ] ]2014-06-01"

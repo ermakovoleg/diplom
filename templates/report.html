@@ -1,23 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-    <table class="table table-striped table-bordered">
-        <tr>
-            <th>!</th>
-            {% for titl in title %}
-             <th>
-                {{ titl }}
-             </th>
-            {% endfor %}
-        </tr>
-
-        {% for record in data %}
+    <div class="jumbotron">
+        <h2> {{ report.title }}</h2>
+        <table class="table table-striped table-bordered">
             <tr>
-                {% for rec in record %}
-                    <td>{% if rec %}{{ rec }}{% endif %} </td>
+                <th>!</th>
+                {% for titl in title %}
+                    <th>
+                        {{ titl }}
+                    </th>
                 {% endfor %}
             </tr>
-        {% endfor %}
-    </table>
+
+            {% for record in data %}
+                <tr>
+                    {% for rec in record %}
+                        <td>{% if rec %}{{ rec }}{% endif %} </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 {% endblock %}

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,12 +9,11 @@
     <!-- Bootstrap -->
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    {% load staticfiles %}
 
-    <link href="{% static "css/main.css" %}" rel="stylesheet">
+    <link href="/static/css/main.css" rel="stylesheet">
 
-      {% block head %}
-      {% endblock %}
+    {% block head %}
+    {% endblock %}
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -22,56 +21,59 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-  </head>
+</head>
 <body>
-    <div class="container">
-        {% block nav %}
-            <!-- Static navbar -->
-              <div class="navbar navbar-default" role="navigation">
-                <div class="container-fluid">
-                  <div class="navbar-header">
-                    <a class="navbar-brand" href="/">Соберем все!</a>
-                  </div>
-                  <div class="navbar-collapse collapse">
+<div class="container">
+    {% block nav %}
+        <div class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">АССиОД "Край"</a>
+                </div>
+                <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                    {% if user.is_staff %}
-                        <li><a href="/form/publish/">Опубликованные формы</a></li>
-                        <li><a href="/report/">Отчеты</a></li>
-                        <li class="dropdown">
-                          <a href="/" class="dropdown-toggle" data-toggle="dropdown">Отчеты<b class="caret"></b></a>
-                          <ul class="dropdown-menu">
-                            {% for rep in reports %}
-                                 <li><a href="/report/{{ rep.pk }}/">{{ rep.title }}</a></li>
-                            {% endfor %}
-                          </ul>
-                         </li>
-                    {% endif %}
+                        {% if user.is_staff %}
+                            <li><a href="/form/publish/">Опубликованные формы</a></li>
+                            <li><a href="/report/">Отчеты</a></li>
+                        {% endif %}
                         <li><a href="/help/">Справка</a></li>
                         {% block navbar %}
-
-                        {%endblock %}
-
+                        {% endblock %}
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                      <li><a href="{% if user.is_staff %}/admin/{% else %}#{% endif %}"><b>{{ user.username }}</b></a> </li>
-                      <li><a href="/logout/">Выход</a></li>
+                        {% if user.is_authenticated %}
+                            <li>
+                                <a href="{% if user.is_staff %}/admin/{% else %}/user/{% endif %}"><b>{{ user.fio }}</b></a>
+                            </li>
+                            <li><a href="/logout/">Выход</a></li>
+                        {% else %}
+                            <li><a href="/login/">Вход</a></li>
+                        {% endif %}
                     </ul>
-                  </div><!--/.nav-collapse -->
-                </div><!--/.container-fluid -->
-              </div>
 
-        {% endblock %}
+                </div>
+            </div>
+        </div>
+    {% endblock %}
 
-        {% block content %}
-        {% endblock %}
+    {% block content %}
+    {% endblock %}
 
-    </div> <!-- /container -->
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
-
-    {% block js %}{% endblock %}
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+{% block js %}{% endblock %}
 
 </body>
 </html>
+
+{% comment %}
+<li class="dropdown">
+  <a href="/" class="dropdown-toggle" data-toggle="dropdown">Отчеты<b class="caret"></b></a>
+  <ul class="dropdown-menu">
+    {% for rep in reports %}
+         <li><a href="/report/{{ rep.pk }}/">{{ rep.title }}</a></li>
+    {% endfor %}
+  </ul>
+ </li>
+{% endcomment %}

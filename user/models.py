@@ -70,6 +70,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(verbose_name='email', max_length=255)
     fio = models.CharField(max_length=300, verbose_name='Ф.И.О.')
 
+    is_active = models.BooleanField(default=True, editable=False)
     is_admin = models.BooleanField(default=False, verbose_name='доступ к административному интерфейсу')
 
     objects = MyUserManager()
@@ -84,6 +85,14 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     def get_short_name(self):
         # The user is identified by their email address
         return self.username
+
+    def get_fio(self):
+        return self.fio
+
+    def get_locality(self):
+        if (self.locality):
+            return self.locality.district.name_district + " - " + self.locality.name
+        return ''
 
     def __str__(self):
         return self.username

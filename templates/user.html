@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="jumbotron">
+        <h2>{{ user.get_fio }}</h2>
+
+        {% if form %}
+            <form method="post"> {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group {% if field.errors %}has-error has-feedback{% endif %}">
+                            {% for error in field.errors %}
+                               <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                                <label class="control-label" for="{{ field.id }}">{{ field.label_tag }}</label>
+                            <div class="controls">
+                                {{ field }}
+                            </div>
+                        </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-success">Изменить</button>
+            </form>
+        {% else %}
+            <h3>{{ user.get_locality }}</h3>
+            <h3>Логин: {{ user.username }}</h3>
+
+            <h3>e-mail: {{ user.email }}</h3>
+            <form method="post">{% csrf_token %}
+                <button type="submit" name="change_psw" class="btn btn-primary">Смена пароля</button>
+                <button type="submit" name="change_email" class="btn btn-primary">Смена e-mail</button>
+            </form>
+        {% endif %}
+
+
+    </div>
+{% endblock %}

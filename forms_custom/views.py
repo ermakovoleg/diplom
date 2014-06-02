@@ -109,11 +109,11 @@ def form_status(request, pk):
                 if template.tableview:
                     for line in record.data_form():
                         temp = [value for key, value in line.items()]
-                        temp.append(record.user.get_full_name())
+                        temp.append(record.user.get_fio())
                         writer.writerow(temp)
                 else:
                     temp = [value for key, value in record.data_form().items()]
-                    temp.append(record.user.get_full_name())
+                    temp.append(record.user.get_fio())
                     writer.writerow(temp)
             return response
     return render_to_response('baseadmin.html', {'template': template}, context_instance=RequestContext(request))
@@ -123,7 +123,6 @@ def form_status(request, pk):
 def get_record(request, pk):
     record = get_object_or_404(Record, pk=pk)
     comments = None
-    print(record.esign)
     if request.POST:
         if 'export' in request.POST:
             response = HttpResponse(mimetype='text/csv')

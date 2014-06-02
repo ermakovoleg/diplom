@@ -1,23 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-
-      <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
-        <h3>Новые формы для заполнения</h3>
+        <h3>Формы для заполнения</h3>
         <ul>
             {% for record in uncompleted_records %}
-               {% if record.status == 'W' %}  <li><a href="/form/{{ record.template.pk }}">{{ record.template.title}}</a></li> {% endif %}
-            {% endfor %}
-        </ul>
-
-        <h3>На доработку</h3>
-        <ul>
-            {% for record in uncompleted_records %}
-               {% if record.status == 'K' %}  <li><a href="/form/{{ record.template.pk }}">{{ record.template.title}}</a></li> {% endif %}
+               <li><a href="/form/{{ record.template.pk }}">{{ record.template.title}} {% if record.status == 'K' %}(Доработка){% endif %}</a></li>
             {% endfor %}
         </ul>
       </div>
-
 {% endblock %}

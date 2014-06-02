@@ -248,7 +248,6 @@ function Verify(sSignedMessage, dataToVerify) {
             oSignedData.Content = dataToVerify;
             oSignedData.VerifyCades(sSignedMessage, CADES_BES, true);
         } catch (err) {
-            alert("Failed to verify signature. Error: " + GetErrorMessage(err));
             return false;
         }
         return true;
