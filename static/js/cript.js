@@ -101,7 +101,7 @@ function CheckForPlugIn() {
         isPluginEnabled = true;
         isPluginWorked = true;
         // проверяем версию плагина
-        if ("1.5.1500" <= oAbout.Version) {
+        if ("1.6.1500" <= oAbout.Version) {
             isActualVersion = true;
         }
     }
@@ -117,7 +117,6 @@ function CheckForPlugIn() {
             }
         }
     }
-
     if (isPluginWorked) { // плагин работает, объекты создаются
         if (isActualVersion) {
 
@@ -137,6 +136,7 @@ function CheckForPlugIn() {
         }
         else { // плагин не загружен
             alert("Плагин не загружен");
+            window.location.replace("/help_browser_plugin/");
         }
     }
 }
@@ -148,7 +148,6 @@ function FillCertList(lstId) {
         alert("Ошибка при открытии хранилища");
         return;
     }
-
     try {
         oStore.Open();
     }
