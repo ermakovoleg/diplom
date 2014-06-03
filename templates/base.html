@@ -43,7 +43,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         {% if user.is_authenticated %}
                             <li>
-                                <a href="{% if user.is_staff %}/admin/{% else %}/user/{% endif %}"><b>{{ user.fio }}</b></a>
+                                <a href="{% if user.is_staff %}/admin/{% else %}{% endif %}"><b>{{ user.fio }}</b></a>
                             </li>
                             <li><a href="/logout/">Выход</a></li>
                         {% else %}
