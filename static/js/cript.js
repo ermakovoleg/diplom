@@ -101,7 +101,7 @@ function CheckForPlugIn() {
         isPluginEnabled = true;
         isPluginWorked = true;
         // проверяем версию плагина
-        if ("1.6.1500" <= oAbout.Version) {
+        if ("1.5.1500" <= oAbout.Version) {
             isActualVersion = true;
         }
     }
