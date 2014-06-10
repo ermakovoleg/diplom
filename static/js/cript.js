@@ -63,7 +63,6 @@ function SignBtn_Click(lstid, dataID, SignId) {
 
     var CADES_BES = 1;
     var CADESCOM_BASE64_TO_BINARY = 1;
-    alert('ewr');
     //try {
     if (txtDataToSign) {
         // Данные на подпись ввели
