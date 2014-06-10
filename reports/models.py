@@ -61,7 +61,7 @@ class ReportRecord(models.Model):
 
 class ReportMaps(models.Model):
     title = models.CharField(max_length=120, verbose_name="Наименование отчета")
-    user_group = models.ForeignKey(MyGroup, verbose_name="Группа???")
+    user_group = models.ForeignKey(MyGroup, verbose_name="Группа пользователй")
 
     def __str__(self):
         return self.title
