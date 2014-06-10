@@ -6,7 +6,7 @@ from forms_custom.models import TemplateField,Record,RecordData
 
 class Report(models.Model):
     title = models.CharField(max_length=120, verbose_name="Наименование отчета")
-    user_group = models.ForeignKey(MyGroup, verbose_name="Группа???")
+    user_group = models.ForeignKey(MyGroup, verbose_name="Группа пользоваталей")
     transp = models.BooleanField(verbose_name='транспонировать')
 
     def __str__(self):

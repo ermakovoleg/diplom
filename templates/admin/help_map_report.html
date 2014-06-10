@@ -1,9 +1,45 @@
 <div class="suit-include">
     <fieldset class="full-width">
-  <h2 class="legend"><a href="/helpmapparametrs/">Справка</a> по заполнению поля параметры отображения </h2>
+  <h2 class="legend"><a href="/helpmapparametrs/">Справка</a> по заполнению поля "параметры отображения" </h2>
 
   <div class="box">
-    А тут сама инфа
+<p></p><h4><span style="line-height: 1.45em; background-color: initial;"><span style="color: rgb(0, 0, 0);"><h4>Для изменения стиля и цвета иконки используются следующие опции:</h4><ul><ul><li><span style="font-weight: normal;">preset&nbsp;— ключ предустановленных стилей метки. Список доступных ключей содержится в описании&nbsp;<a href="http://api.yandex.ru/maps/doc/jsapi/2.1/ref/reference/option.presetStorage.xml">option.presetStorage</a>. Опцию&nbsp;preset&nbsp;можно задавать совместно с опцией&nbsp;iconColor, только если она принимает одно из следующих значений:</span><ul><li><span style="font-weight: normal;">'islands#icon';</span></li><li><span style="font-weight: normal;">'islands#dotIcon';</span></li><li><span style="font-weight: normal;">'islands#circleIcon';</span></li><li><span style="font-weight: normal;">'islands#circleDotIcon'.</span></li></ul></li><li><span style="font-weight: normal;">iconColor&nbsp;— цвет иконки метки. Можно задавать в любом формате, допустимом в CSS (например, по названию или в формате RGB).Эта опция применяется для стандартных иконок в браузерах, поддерживающих SVG.</span></li></ul></ul></span></span></h4><h4><span style="line-height: 1.45em; background-color: initial;"><span style="color: rgb(0, 0, 0);">Пример (и</span></span><span style="line-height: 1.45em; background-color: initial;">зменение&nbsp;</span><span style="background-color: initial;">стиля и цвета иконки</span><span style="line-height: 1.45em; background-color: initial;">)</span></h4><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><p></p><pre>preset: 'islands#circleIcon',
+
+iconColor: '#4d7198'</pre><p></p></blockquote><p></p><h4><span style="line-height: 18px;">Если требуется задать собственный макет иконки, то необходимо указать следующие опции:</span></h4><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><pre>// Опции.
+// Необходимо указать данный тип макета.
+// Своё изображение иконки метки.
+
+iconImageHref: 'examples/maps/ru/icon_customImage/images/myIcon.gif',
+
+// Размеры метки.
+iconImageSize: [30, 42],
+
+// Смещение левого верхнего угла иконки относительно
+// её "ножки" (точки привязки).
+iconImageOffset: [-3, -42]
+</pre></blockquote><p><br></p><h4>Стили отображения лиманой и полигона.</h4>
+<blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+<p>
+<span style="line-height: 1.45em;">
+</span></p><pre>// Цвет линии или обводки.
+strokeColor: "#000000",
+
+// Ширина линии или обводки.
+strokeWidth: 4,
+
+// Коэффициент прозрачности линии или обводки.
+strokeOpacity: 0.5
+
+//Наличие заливки фигуры.
+fill: true
+
+// Цвет заливки фигуры.
+&lt;br&gt;fillColor: "#123456",
+
+// Прозрачность заливки фигуры.
+fillOpacity: 0.5&amp;nbsp;
+</pre><p></p></blockquote>
+
   </div>
 
 </fieldset>

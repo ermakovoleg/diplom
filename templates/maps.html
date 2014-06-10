@@ -10,6 +10,11 @@
         <div id="map" style="width:100%; height:600px"></div>
     </div>
 
+    {% for record in records %}
+        <P>{{ forloop.counter}}</P>
+        <input type="hidden" value="{ {{ record.parametrs|safe }} }" id="param{{ forloop.counter }}">
+    {% endfor %}
+
 
 {% endblock %}
 
@@ -27,6 +32,7 @@
                 center: [53.9945, 115.264],
                 type: 'yandex#hybrid',
                 controls: ['zoomControl', 'typeSelector', 'fullscreenControl', 'rulerControl']});
+
             function addpoint(coordinate, dopinf, param) {
                 var myGeoObject;
                 myGeoObject = new ymaps.Placemark(coordinate, dopinf, param);
@@ -50,13 +56,15 @@
             {% for record in records %}
                 {% for data in record.data %}
                     {% for coord in data.coords %}
-                        var param = $('#parampam').html();
+
+                        eval('var param='+document.getElementById("param{{ forloop.counter }}").value);
                         switch ('{{ record.type }}') {
                             case 'P':
-
-                                addpoint({{ coord.coord.value }}, {balloonContentBody: "{{ coord.caption.value }}",
-                                    balloonContentHeader: "{{ report.title }}",
-                                    balloonContentFooter: "{{ data.user }}"});
+                                addpoint({{ coord.coord.value }},
+                                        {balloonContentBody: "{{ coord.caption.value }}",
+                                        balloonContentHeader: "{{ report.title }}",
+                                        balloonContentFooter: "{{ data.user }}"},
+                                        param);
                                 break;
                             case 'Z':
                                 addpolygon({{ coord.coord.value }}, {balloonContentBody: "{{ coord.caption.value }}",

@@ -31,7 +31,7 @@ class ReportMapsAdmin(admin.ModelAdmin):
     inlines = [ReportRecordMapsInLines, ]
 
     suit_form_includes = (
-        ('admin/help_map_report.html', 'middle', ''),
+        ('admin/help_map_report.html', 'bottom', ''),
     )
 
     class Media:
