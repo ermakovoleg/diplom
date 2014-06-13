@@ -69,12 +69,12 @@
                             case 'Z':
                                 addpolygon({{ coord.coord.value }}, {balloonContentBody: "{{ coord.caption.value }}",
                                     balloonContentHeader: "{{ report.title }}",
-                                    balloonContentFooter: "{{ data.user }}"});
+                                    balloonContentFooter: "{{ data.user }}"}, param);
                                 break;
                             case 'L':
                                 addpolyline({{ coord.coord.value }}, {balloonContentBody: "{{ coord.caption.value }}",
                                     balloonContentHeader: "{{ report.title }}",
-                                    balloonContentFooter: "{{ data.user }}"});
+                                    balloonContentFooter: "{{ data.user }}"}, param);
                                 break;
                         }
                     {% endfor %}

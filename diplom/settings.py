@@ -16,8 +16,13 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
+production = False
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'dis.chita@gmail.com'
+EMAIL_HOST_PASSWORD = 'dis.chita123456'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 TEMPLATE_DIRS = (
     'templates/',
@@ -44,6 +49,9 @@ INSTALLED_APPS = (
     'reports',
 )
 
+if production:
+    INSTALLED_APPS += ('gunicorn',)
+
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -66,25 +74,24 @@ AUTH_USER_MODEL = 'user.MyUser'
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-''''default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    },
-
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'diplom',
-        'USER': 'diplom',
-        'PASSWORD': '123456',
-        'HOST': '90.189.24.131',
-
-
-    '''
-DATABASES = {
+if production:
+    DATABASES = {
+        'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'diplom_db',
+            'USER': 'django',
+            'PASSWORD': 'pass',
+            'HOST': 'localhost',
+            'PORT': '',
+        },
+    }
+else:
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
-}
+    }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -110,3 +117,6 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = 'static'
 
+LOGGING = {
+    'version': 1,
+}

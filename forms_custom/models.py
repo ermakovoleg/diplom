@@ -97,7 +97,7 @@ class Record(models.Model):
     template = models.ForeignKey(Template, editable=False)
     cdt = models.DateTimeField(editable=False)
     user = models.ForeignKey(MyUser, editable=False)
-    esign = models.CharField(max_length=2000, default=0, editable=False)
+    esign = models.TextField(default=0, editable=False)
     status = models.CharField(max_length=1, choices=StatusTypes, verbose_name="статус", default='W')
     approved = models.ForeignKey(MyUser, verbose_name='утвердил', null=True, blank=True, related_name='approved')
 

@@ -84,7 +84,9 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         # The user is identified by their email address
-        return self.username
+        if (self.locality):
+            return self.locality.district.name_district + ' - ' + self.locality.name+' (' + self.fio + ')'
+        return self.fio
 
     def get_fio(self):
         return self.fio
@@ -95,7 +97,9 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return ''
 
     def __str__(self):
-        return self.username
+        if (self.locality):
+            return self.locality.district.name_district + ' - ' + self.locality.name+' (' + self.fio + ')'
+        return self.fio
 
     @property
     def is_staff(self):
