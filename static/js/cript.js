@@ -82,6 +82,7 @@ function SignBtn_Click(lstid, dataID, SignId) {
 
     } else {
         alert("Set data to Sign");
+        return false;
     }
     oStore.Close();
 
@@ -210,8 +211,13 @@ function GetErrorMessage(e) {
 
 
 //Получаем данные всех полей модели
-function Data(){
-    var fields = $('#tab tbody tr :input');
+function Data(type){
+    if (type==0){
+        var fields = $("#data :input:visible");
+    }
+    else{
+        var fields = $('#tab tbody tr :input');
+    }
     var len=fields.length;
     var mas='';
       for(var i=0;i<len;i++){

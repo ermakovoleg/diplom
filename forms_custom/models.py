@@ -126,7 +126,10 @@ class Record(models.Model):
     def data_form(self):
         rex = RecordData.objects.filter(record=self)
         if self.template.tableview:
-            num_lines = rex.aggregate(Max('line'))['line__max']
+            if rex.aggregate(Max('line'))['line__max'] is None:
+                num_lines = 1
+            else:
+                num_lines = rex.aggregate(Max('line'))['line__max']
             data = []
             for x in range(num_lines+1):
                 line = {}
@@ -151,9 +154,10 @@ class Record(models.Model):
         if self.template.tableview:
                 for line in self.data():
                     temp = [value.get_value() for value in line]
+                    s += ''.join(temp)
         else:
             temp = [value.get_value() for value in self.data()]
-        s = ''.join(temp)
+            s = ''.join(temp)
         return s
 
 

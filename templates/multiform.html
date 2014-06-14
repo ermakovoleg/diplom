@@ -23,7 +23,7 @@
             </div>
         {% endfor %}
         <form method="POST" name="DataForm"
-              onsubmit="return SignBtn_Click('CertListBox',Data(),'sign')"> {% csrf_token %} {% comment %}jk{% endcomment %}
+              onsubmit="return SignBtn_Click('CertListBox',Data(1),'sign')"> {% csrf_token %} {% comment %}jk{% endcomment %}
             {{ formFactory.management_form }}
             <div id="data" class="table-responsive container" style="width: 100%; overflow: auto">
                 <table id="tab" class="table table-bordered table-condensed" >

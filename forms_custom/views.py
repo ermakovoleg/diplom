@@ -105,7 +105,7 @@ def form_status(request, pk):
             head = [x.title for x in template.fields()]
             head.append('Пользователь')
             writer.writerow(head)
-            for record in template.get_records():
+            for record in template.get_records().filter(status="R"):
                 if template.tableview:
                     for line in record.data_form():
                         temp = [value for key, value in line.items()]

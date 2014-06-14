@@ -23,7 +23,7 @@
                         <footer>{{ comment.user }}  {{ comment.cdt|date }}</footer>
                     </div>
                 {% endfor %}
-            <form method="POST"  action="" name="DataForm"> {% csrf_token %} {# onsubmit="return SignBtn_Click('CertListBox',Data(),'sign')" #}
+            <form method="POST"  onsubmit="return SignBtn_Click('CertListBox',Data(0),'id_sign')" name="DataForm"> {% csrf_token %} {#  #}
                 <div id="data">
                     {% for field in form %}
                         <div class="form-group {% if field.errors %}has-error has-feedback{% endif %}">
