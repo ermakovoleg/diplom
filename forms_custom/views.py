@@ -103,16 +103,18 @@ def form_status(request, pk):
             writer = csv.writer(response, delimiter=';', dialect='excel')
             response.write(u'\ufeff'.encode('utf8'))
             head = [x.title for x in template.fields()]
+            head1 = [x.tag for x in template.fields()]
             head.append('Пользователь')
             writer.writerow(head)
             for record in template.get_records().filter(status="R"):
                 if template.tableview:
                     for line in record.data_form():
-                        temp = [value for key, value in line.items()]
+                        temp = [line[key] for key in head1]
                         temp.append(record.user.get_fio())
                         writer.writerow(temp)
                 else:
-                    temp = [value for key, value in record.data_form().items()]
+                    data = record.data_form()
+                    temp = [data[key] for key in data]
                     temp.append(record.user.get_fio())
                     writer.writerow(temp)
             return response

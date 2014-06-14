@@ -54,6 +54,7 @@ class Report(models.Model):
         verbose_name = 'консолидированный отчет'
         verbose_name_plural = 'консолидированные отчеты'
 
+
 class ReportRecord(models.Model):
     report = models.ForeignKey(Report)
     field = models.ForeignKey(TemplateField, limit_choices_to={'template__tableview': False})
@@ -85,7 +86,7 @@ class ReportRecordMaps(models.Model):
 
     def get_value(self):
         users = self.report.user_group.get_user()
-        data = {'type': self.field.type, 'parametrs': self.parametrs, 'data': []}
+        data = {'type': self.field.type, 'parametrs': self.parametrs, 'data': [], 'title': self.field.template.title}
         for user in users:
             temp = {}
             fields = RecordData.objects.filter(record__user=user, field=self.field)
